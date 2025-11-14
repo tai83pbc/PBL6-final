@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  # === Ứng dụng 1: Quản lý điện thoại ===
+  web_dienthoai:
+    build: .
+    container_name: pbl_web_dienthoai
+    volumes:
+      - ./qldienthoai:/var/www/html
+    ports:
+      - "8001:80"
+    depends_on:
+      - db_dienthoai
+    networks:
+      - pbl_network
+
+  db_dienthoai:
+    image: mysql:5.7
+    container_name: pbl_db_dienthoai
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: web_dienthoai
+      MYSQL_USER: user_dt
+      MYSQL_PASSWORD: password_dt
+    volumes:
+      - ./qldienthoai/csdl/webphukiendt.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pbl_network
+
+  # === Ứng dụng 2: Quản lý sinh viên ===
+  web_sinhvien:
+    build: .  # <--- SỬA Ở ĐÂY
+    container_name: pbl_web_sinhvien
+    volumes:
+      - ./qlsinhvien:/var/www/html
+    ports:
+      - "8002:80"
+    depends_on:
+      - db_sinhvien
+    networks:
+      - pbl_network
+
+  db_sinhvien:
+    image: mysql:5.7
+    container_name: pbl_db_sinhvien
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: web_sinhvien
+      MYSQL_USER: user_sv
+      MYSQL_PASSWORD: password_sv
+    volumes:
+      - ./qlsinhvien/btwebth.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pbl_network
+
+  # === Ứng dụng 3: Quản lý thời trang ===
+  web_thoitrang:
+    build: .  # <--- SỬA Ở ĐÂY
+    container_name: pbl_web_thoitrang
+    volumes:
+      - ./qlthoitrang:/var/www/html
+    ports:
+      - "8003:80"
+    depends_on:
+      - db_thoitrang
+    networks:
+      - pbl_network
+
+  db_thoitrang:
+    image: mysql:5.7
+    container_name: pbl_db_thoitrang
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: web_thoitrang
+      MYSQL_USER: user_tt
+      MYSQL_PASSWORD: password_tt
+    volumes:
+      - ./qlthoitrang/thoitrang.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pbl_network
+
+  # === Ứng dụng 4: Quản lý trắc nghiệm ===
+  web_tracnghiem:
+    build: .  # <--- SỬA Ở ĐÂY
+    container_name: pbl_web_tracnghiem
+    volumes:
+      - ./qltracnghiem:/var/www/html
+    ports:
+      - "8004:80"
+    depends_on:
+      - db_tracnghiem
+    networks:
+      - pbl_network
+
+  db_tracnghiem:
+    image: mysql:5.7
+    container_name: pbl_db_tracnghiem
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: web_tracnghiem
+      MYSQL_USER: user_tn
+      MYSQL_PASSWORD: password_tn
+    volumes:
+      - ./qltracnghiem/sourcecodester_exam.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pbl_network
+
+# Định nghĩa network chung cho các container
+networks:
+  pbl_network:
+    driver: bridge

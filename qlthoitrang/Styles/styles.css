@@ -1,0 +1,279 @@
+@charset "UTF-8";
+html,body{
+	width:100%;
+	height:100%;
+	font-family:Roboto !inporttant;
+	font-size:14px;
+}
+
+/* start css login */
+#body-login{
+	background-color: #00909C;
+}
+
+#body-flex-login{
+	display:flex;
+	height:100%;
+	justify-content:center;
+	align-items:center;
+}
+
+#container-login{
+	display:flex;
+	width:820px;
+	height:610px;
+	background-color: white;
+}
+
+#container-login-left{
+	display:flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width:384px;
+	height:610px;
+	background-image: url("../Images/backgroundlogin.png");
+	padding: 0 16px;
+}
+
+#container-login-right{
+	
+}
+
+.header-login{
+	margin-top: 32px;
+}
+
+#header-top-left{
+	text-align: center;
+}
+
+#text-logo{
+	font-size:48px;
+}
+
+#hint-text-logo{
+	font-size:12px;
+	opacity: 0.7;
+}
+
+#header-bottom-left{
+	margin-bottom: 64px;
+}
+
+#header-bottom-left span{
+	margin-left: 8px;
+}
+
+#container-login-right{
+	padding: 0 24px;
+	flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+	
+}
+#header-top-right{
+
+    font-size: 20px;
+    color: #B7B7B7;
+}
+.actived{
+	color: #DA7C79;
+}
+
+#container-social-login{
+	align-self: flex-end;
+	margin-bottom:  16px;
+}
+
+
+#container-center-login-right input[type=text]{
+	margin-top : 8px;
+}
+
+#container-center-login-right input[type=password]{
+	margin-top : 8px;
+}
+
+#container-center-login-right input[type=submit]{
+	margin-top : 24px;
+	color: white;
+	font-size: 14px;
+}
+.material-textinput{
+    background-color: #D8D8D8;
+    border: 0;
+    width: 100%;
+    height: 38px; 
+    font-size:14px;  
+}
+
+.material-submit{
+	    background-color: #00909C;
+	    border: 0;
+	    width: 100%;
+	    height: 38px;
+	    box-shadow: 0px 2px 4px 0px #000;
+}
+.input-icon-email{
+	background: url(../Images/ic_email.png) no-repeat scroll 16px 9px;
+    background-color: #D8D8D8;
+    border: 0;
+    width: 100%;
+    height: 38px;  
+    padding-left: 42px;
+}
+
+.input-icon-password{
+	background: url("../Images/ic_lock.png") no-repeat scroll 16px 9px;
+	background-color: #D8D8D8;
+    border: 0;
+    width: 100%;
+    height: 38px; 
+    padding-left: 42px;
+}
+/* end css login*/
+
+
+/* start css home */
+
+#header{
+	height :750px;
+	background: linear-gradient(
+      rgba(0, 0, 0, 0.42), 
+      rgba(0, 0, 0, 0.42)
+    ), url("../Images/backgroundhome.png")no-repeat center center;
+	-webkit-background-size: cover;
+ 	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+}
+.nav_none{
+	background: none !important;
+	border: none !important;
+}
+
+.navbar-center{
+	margin-left: 22% !important;
+}
+
+.navbar-nav a{
+	color: white !important;
+}
+
+.active > a{
+	color : #0167ff !important;
+	background : none !important ;
+	font-weight: bold;
+}
+
+.open > a{
+	color : #0167ff !important;
+	background : none !important ;
+	font-weight: bold;
+}
+
+.dropdown-menu {
+	background-color : #0167ff !important;
+}
+
+.event-header{
+	text-align: center;
+	margin-top:216px;
+	
+}
+
+.event-header > span{
+	color: white;
+}
+
+.event-header > button{
+	color: white;
+	background-color: #9961ac;
+	border:#9961ac;
+}
+
+
+@media (max-width: 575.98px) {
+	.navbar-center{
+	margin-left: 0 !important;
+}
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) { 
+	.navbar-center{
+		margin-left: 0 !important;
+	}
+ }
+
+
+@media (min-width: 768px) and (max-width: 991.98px) { 
+	.navbar-center{
+	margin-left: 2% !important;
+} }
+
+@media (min-width: 992px) and (max-width: 1199.98px) { ... }
+
+@media (min-width: 1200px) { ... }
+
+
+.icon{
+	width: 48px;
+	height: 48px;
+}
+
+#infor{
+	text-align: center;
+	margin-top:48px;
+}
+
+#infor > span{
+	margin-top: 16px;
+}
+
+#title-sanpham{
+	margin-top:100px;
+	text-align: center;
+	font-size: 32px;
+	font-weight: 500;	
+}
+
+.sanpham{
+	padding-bottom:16px;
+	margin-top:30px;
+	background-color: #fff;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.sanpham img{
+	height:256px;
+}
+
+.price{
+	font-size:14px;
+	color:red;
+	margin-bottom:16px;
+	padding-bottom: 16px;
+}
+
+#footer{
+	margin-top: 42px;
+	color:white;
+	background-color:black;
+	padding:38px;
+}
+
+#footer p{
+	text-align: center;
+}
+
+#footer textarea{
+	background-color: #D8D8D8;
+    border: 0;
+    width: 100%;
+    font-size:14px;  
+}
+
+/* end css home */

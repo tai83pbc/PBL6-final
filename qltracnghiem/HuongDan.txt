@@ -1,0 +1,28 @@
+How to setup Web Based Quiz System in PHP/MySQLi with Full Source Code
+1.	Download the zip file.
+2.	Download and install XAMPP
+3.	Run the XAMPP control panel and start MySQL and Apache
+4.	Go to C:\xampp\htdocs and extract the downloaded zip file (onlinequiz) inside the folder
+5.	Open the browser and go to http://localhost/phpmyadmin/ to create the database
+6.	Click the new to create a database.
+7.	Name the database sourcecodester_exam
+8.	Click import to import the sql file.
+9.	Click choose file and select the file that can be found inside the onlinequiz folder
+10.	Click go.
+How to run Web Based Quiz System in PHP/MySQLi with Full Source Code
+Accessing admin accounts
+Open the browser and go to http://localhost/onlinequiz/admin.php
+Username: admin@admin.com
+Password: admin
+Accessing cashier accounts
+Open the browser and go to http://localhost/onlinequiz/
+Register
+This Web Based Quiz System in PHP/MySQLi with Full Source Code is for educational purposes only. You can download it as a reference and expand your knowledge in making a system. You can freely modify it, according to your desire.
+ 
+ShareFacebookTwitter
+Note: Due to the size or complexity of this submission, the author has submitted it as a .zip file to shorten your download time. After downloading it, you will need a program like Winzip to decompress it.
+Virus note: All files are scanned once-a-day by SourceCodester.com for viruses, but new viruses come out every day, so no prevention program can catch 100% of them.
+FOR YOUR OWN SAFETY, PLEASE:
+1. Re-scan downloaded files using your personal virus checker before using it.
+2. NEVER, EVER run compiled files (.exe's, .ocx's, .dll's etc.)--only run source code.
+
