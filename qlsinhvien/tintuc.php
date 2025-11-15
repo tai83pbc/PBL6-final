@@ -1,0 +1,40 @@
+﻿<div  style="color:white;width: 700px;height:850px;margin-top: 10px;float: right;border-bottom: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;border-top: 1px solid #fff;background: url(images/content_bg.jpg);background-repeat: repeat-x;">
+<div>
+<h4 style="text-align:left;height:26px;background: url(images/headline.jpg);color: #fff;padding: 0px;padding-top: 0px;	
+padding-bottom: 0px;text-decoration: none;font-size: 16px;background-repeat: repeat-x;margin-bottom: 0px;
+margin-left: 0px;margin-right: 0px;margin-top: 0px;border-top: 1px solid #fff;
+border-right: 1px solid #fff;border-left: 1px solid #fff;">&nbsp;Tin Tức</h4></div>
+<div style="background-color: #f0f0f0;color: #000;padding: 0px; 
+	margin: 0;border: 1px solid #fff;height:822px;">
+<?php
+	if(isset($_SESSION["id"])){
+			$conn=mysqli_connect("db_sinhvien", "user_sv", "password_sv", "web_sinhvien") ;
+			if(!$conn)
+				die('can not connect database:'.mysqli_error($conn));
+			else{
+					mysqli_select_db($conn, "qlsinhvien");
+					$select="select * from text where catid=2 order by bydate DESC limit 0,6";
+					$result=mysqli_query($conn, $select);
+					if(mysqli_num_rows($result)==0)
+						echo "không có thông tin";
+					else{
+						while($row= mysqli_fetch_array($result))
+						{
+							?><br />
+							 <div width=600px style="padding:0px 20px 0pt 20px;">
+									<div style="color:#0066CC; font: bold  11pt Arial"><img src="images/bullet.gif" width= 8px height= 8px/><?php echo " ".$row["title"] ?></div>
+								<?php echo $row["content"] ?><br/>
+								<span style="float:right"><?php echo "Author : ".$row["username"]." - Updated : ".$row["bydate"] ?></span><br />
+							</div>
+	 <?php
+						}
+					}
+				}
+			mysqli_close($conn);
+	}
+	else
+		header("location:index.php");
+		?>
+
+</div>
+</div>

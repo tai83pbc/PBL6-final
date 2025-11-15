@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+	<link rel="stylesheet" href="styles.css" type="text/css" />
+	<title>New web site</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script language="JavaScript">
+		function checkForm() {
+		   var maso = document.getElementById("textid");
+		   var tieude = document.getElementById("title");
+		   var noidung = document.getElementById("ctent");
+		   if(tieude.value==""){
+					ott.innerHTML="Chưa có tiêu đề";
+					return false;}
+		   if(noidung.value==""){
+					oct.innerHTML="Chưa có nội dung";
+					return false;}
+		   return true;
+		   if(maso.value==""){
+					oms.innerHTML="Chưa chọn tin";
+					return false;}
+		   return true;
+		}
+	</script>
+<style>
+img{margin-right:10px;width:15px;height:15px;border:solid 1px #FFFFFF}
+.bang{border-collapse:collapse; border:solid 1px green;}
+.dong{border:solid 1px green;}
+.cot{border:solid 1px green; font: normal 9pt Arial}
+.tde{background-color: #FFFF66; font: bold 10pt Arial;border:solid 1px green; }
+</style>
+</head>
+<body>
+<div id="all">
+	<?php
+	
+		include('header.html');
+		include('left.php'); 
+	if(isset($_REQUEST["id"])){
+		$id=$_REQUEST['id'];
+		$con=mysqli_connect("localhost","root","");
+		$db=mysqli_select_db("btwebth",$con);
+		$sql="Select * from text where textid='$id'";
+
+		$rs=mysqli_query($con, $sql);
+		$row=mysqli_fetch_array($rs);
+	?>
+			<div id="textcontent" style="color:white;width: 700px;height:850px;margin-top: 10px;float: right;border-bottom: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;border-top: 1px solid #fff;background: url(images/content_bg.jpg);background-repeat: repeat-x;">
+		<div class="text" style="height:26px;">
+		<h4 style="font-size: 16px;height:26px;text-align:left;margin-top:0px;padding-top:0px;">Các tin đã đăng</h4>
+		</div>
+		<div class="textbackground" style="height:813px;" >
+		<br>
+		<table align=center>
+		<form onsubmit = "return checkForm();" method=POST action="index.php?op=10" >
+			<tr>
+			<td>Mã số</td>
+			
+			<td><input type=text name="textid"  id="textid" readonly="true"   style="width:100px;height:20px;" value="<?php echo $row['textid'];?>"></td>
+				<td width=200><span id=oms></span></td></tr>
+			<tr>
+				<td>Tiêu đề</td>
+				<td><span style="float:left"><input type=text name="title"  id="title" style="width:200px;height:20px;" value="<?php echo $row['title'];?>"></span></td>
+				<td width=200><span id=ott></span>
+			</tr>
+			<tr>
+				<td colspan=2><span style="float:left">Nội dung</span></td>
+				<td width=200><span id=oct></span>
+			</tr>
+			<tr>
+				<td colspan=3><span style="float:left"><TEXTAREA  name="ctent" id="ctent" style="width:400px;height:300px;" ><?php echo $row['content']; ?></TEXTAREA></span></td>
+			</tr>
+			<tr>
+				<td colspan=3>
+				<span style="float:left"><input type=submit name=Post value="Sửa tin" style="width:100px; height:30px;"></span>
+				</td>
+			</tr>  
+		</form>
+		</table><br><br>
+		<?php
+				}
+		$con=mysqli_connect("localhost","root","");
+		$db=mysqli_select_db("btwebth",$con);
+		$sql="Select * from text order by bydate DESC limit 0,10";
+		$rs=mysqli_query($con, $sql);?>
+		<div style="float:left; width:685px; background: #666666;background-repeat:no-repeat;color:#FFFFFF; font: bold  12pt Arial">&nbsp;Các bài viết đã đăng 
+ 		</div><br><br>
+		<table class="bang">
+		  <tr class="dong">
+			<td class="tde"  align="center">Tiêu đề</td>
+			<td class="tde" align="center">Ngày Đăng</td>
+			<td class="tde" align="center">Chức năng</td>
+		  </tr>
+		<?php while($row=mysqli_fetch_array($rs)){
+		?>
+		<tr class="dong"><td class="cot"><?php echo $row['title']; ?> </td>
+		<td class="cot"><?php echo $row['bydate']; ?> </td>
+		<td  class="cot" align="center"><a href="xoa.php?id=<?php echo $row['textid']; ?>"><img src=images\delete.png ALT='Delete'></a>
+		 <a href="update.php?id=<?php echo $row['textid']; ?>"><img src=images\edit.png alt="Edit"></a></td></tr>
+		<?php
+		}
+		?>
+		</table>
+		</div>
+		</div>
+		
+		<?php 
+		include('footer.html');
+		?>
+</div>
+</html>
+

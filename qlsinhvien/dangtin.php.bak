@@ -1,0 +1,89 @@
+﻿</html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="styles.css" type="text/css" />
+	<script language="JavaScript">
+		function checkForm() {
+			ott.innerHTML="";
+			olc.innerHTML="";
+			oct.innerHTML="";
+		   tieude = document.getElementById("title");
+		   luachon = document.getElementById("lc");
+		   noidung = document.getElementById("ctent");
+		   if(tieude.value==""){
+					ott.innerHTML="Chưa có tiêu đề";
+					return false;}
+			if(luachon.value==""){
+					olc.innerHTML="Chưa lựa chọn";
+					return false;}
+		   if(noidung.value==""){
+					oct.innerHTML="Chưa có nội dung";
+					return false;}
+		   return true;
+		}
+	</script>
+<style>
+img{margin-right:10px;width:15px;height:15px;border:solid 1px #FFFFFF}
+.bang{border-collapse:collapse; border:solid 1px green;}
+.dong{border:solid 1px green;}
+.cot{border:solid 1px green; font: normal 9pt Arial}
+.tde{background-color: #FFFF66; font: bold 10pt Arial;border:solid 1px green; }
+</style>
+</head>
+	<body>
+		<div id="textcontent" style="color:white;width: 700px;height:850px;margin-top: 10px;float: right;border-bottom: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;border-top: 1px solid #fff;background: url(images/content_bg.jpg);background-repeat: repeat-x;">
+		<div class="text" style="height:26px;">
+		<h4 style="font-size: 16px;height:26px;text-align:left;margin-top:0px;padding-top:0px;">Ðăng bài viết</h4>
+		</div>
+		<div class="textbackground" style="height:813px;" >
+		<br>
+		<?php
+		if(isset($_SESSION["ad"])){
+		?>
+		<table align=center>
+		<form onsubmit = "return checkForm();" method=POST action="index.php?op=7" >	 
+			<tr>
+				<td>Tiêu đề</td>
+				<td><span style="float:left"><input type=text name="tt" id="title"  style="width:200px;height:20px;"></span></td>
+				<td width=200><span id=ott></span></td>
+			</tr>
+			<tr><td>Loại tin:</td>
+			<td><select  name="lc" id="lc">
+			<option value="">--Lựa chọn loại tin--</option>
+			<?php
+			$sql="select * from catid";
+			$con=mysqli_connect("localhost","root","");
+			$db=mysqli_select_db("btwebth",$con);
+			mysqli_query("SET NAMES 'utf8'");
+			$result=mysqli_query($con, $sql);
+			while($row= mysqli_fetch_array($result))
+					{
+			?>
+			<option value="<?php echo $row['catid'];?>"><?php echo $row['cat'];?></option>
+			<?php } ?>
+			</select>
+			</td>
+			<td width=200><span id=olc></span></td>
+			<tr>
+				<td colspan=2><span style="float:left">Nội dung</span></td>
+				<td width=200><span id=oct></span></td>
+			</tr>
+			<tr>
+				<td colspan=3><span style="float:left"><TEXTAREA name="ct" id="ctent" style="width:400px;height:300px;"></TEXTAREA></span></td>
+			</tr>
+			<tr>
+				<td colspan=3>
+				<span style="float:left"><input type=submit name=Post value="Ðăng bài" style="width:100px; height:30px;"><input type=reset name=rs value="Xóa" style="width:100px; height:30px;"></span>
+				</td>
+			</tr>  
+		</form>
+		</table>
+		<?php
+			}
+				else{
+					echo "Bạn không phải là người quản trị";}
+		?>
+		</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,86 @@
+﻿</html>
+<head>
+	<link rel="stylesheet" href="styles.css" type="text/css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script language="JavaScript">
+		function checkForm() {
+		   var hoten = document.getElementById("ht");
+		   var diachi = document.getElementById("dc");
+		   var sdt = document.getElementById("fone");
+		   var email = document.getElementById("m");
+		   var matk = document.getElementById("mtk");
+		   var pw = document.getElementById("p");
+		   var kt= pw.value;
+			if(hoten.value==""){
+					oht.innerHTML="Không được trống";
+					return false;}
+			if(diachi.value==""){
+					odc.innerHTML="Không được trống";
+					return false;}
+			if(sdt.value=="" || isNaN(sdt.value)){
+					odt.innerHTML="Phải là kiểu số";
+					return false;}
+			if(email.value==""){
+					oem.innerHTML="Không được trống";
+					return false;}
+			if(matk.value==""){
+					ous.innerHTML="Không được trống";
+					return false;}
+			if(pw.value=="" || kt.length<6){
+					omk.innerHTML="phải hơn 5 kí tự";
+					return false;}
+			return true;
+		}
+	</script>
+
+</head>
+	<body>
+		<div id="textcontent" style="color:white;width: 700px;height:850px;margin-top: 10px;float: right;border-bottom: 1px solid #fff;border-left: 1px solid #fff;border-right: 1px solid #fff;border-top: 1px solid #fff;background: url(images/content_bg.jpg);background-repeat: repeat-x;">
+		<div class="text" style="height:26px;">
+		<h4 style="font-size: 16px;height:26px;text-align:left;margin-top:0px;padding-top:0px;">Đăng ký thành viên</h4>
+		</div>
+		<div class="textbackground" style="height:813px;" >
+		<br>
+		<table align=center>
+		<form onsubmit = "return checkForm();" method=POST action="index.php?op=5" >	 
+			<tr>
+				<td>Họ và tên</td>
+				<td><span style="float:left"><input type=text name="fn" id="ht" style="width:200px;height:25px;"></span></td>
+				<td width=200><span id=oht></span>
+			</tr>
+			<tr>
+				<td>Địa chỉ</td>
+				<td><span style="float:left"><input type=text name="ad" id="dc" style="width:200px;height:25px;"></span></td>
+				<td width=200><span id=odc></span>
+			</tr>
+			<tr>
+				<td>Số điện thoại</td>
+				<td><span style="float:left"><input type=text name="tel" id="fone" style="width:200px;height:25px;"></span></td>
+				<td width=200><span id=odt></span>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><span style="float:left"><input type=text name="em" id="m" style="width:200px;height:25px;"></span></td>
+				<td width=200><span id=oem></span>
+			</tr>
+			<tr>
+				<td>Tên tài khoản</td>
+				<td><span style="float:left"><input type=text name="u" id="mtk" style="width:200px;height:25px;"></span></td>
+				<td width=200><span id=ous></span>
+			</tr>
+			<tr>
+				<td>Mật khẩu</td>
+				<td><span style="float:left"><input type=password name="ps" id="p" style="width:200px; height:25px;" ></span></td>
+				<td width=200><span id=omk></span>
+			</tr>
+			<tr>
+				<td colspan=2>
+				<span style="float:right"><input type=submit name=sm value="Đăng ký" style="width:100px; height:30px;"><input type=reset name=rs value="Xóa" style="width:100px; height:30px;"></span>
+				</td>
+			</tr>  
+		</form>  
+		</table>
+		</div>
+		</div>
+	</body>
+</html>

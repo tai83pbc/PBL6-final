@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>
+New web site
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div id="content" style="width: 190px; height:800px">
+<div id="leftnavigation">
+<div id="mainnavigation">
+<h3>Navigation</h3>
+<a href="index.php?op=1">Ðăng nhập</a>
+<a href="index.php?op=2">Ðăng ký </a>
+<?php 
+	if(isset($_SESSION["id"])){
+	if(isset($_SESSION["ad"])){
+?>
+<a href="update.php">Hiệu chỉnh tin</a>
+<a href="index.php?op=4">Xem tất cả tài khoản </a>
+<a href="index.php?op=6">Đăng tin</a>
+<?php } 
+	
+	?><a href="index.php?op=13&cusid=<?php echo $_SESSION["id"]?>">Cập nhập thông tin cá nhân</a>
+<a href="index.php?op=9">Thoát</a>
+<?php } ?>
+</div>
+</div>
+</div>
+</html>
