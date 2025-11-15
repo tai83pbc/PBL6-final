@@ -1,0 +1,15 @@
+==================================================
+VULNERABILITY SCAN REPORT
+==================================================
+
+Target URL: http://localhost:8003/
+Scan Time: 2025-11-14 20:23:36
+Vulnerabilities Found: 2
+
+----------------------------------------
+Vulnerability #1
+----------------------------------------
+Type: Stored/Reflected XSS (POST)
+URL: http://localhost:8003/?frame=timkiem
+Parameter: timkiem
+Payload Used: <script>alert('XSS')</script>

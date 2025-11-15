@@ -1,0 +1,148 @@
+==================================================
+VULNERABILITY SCAN REPORT
+==================================================
+
+Target URL: http://localhost:8003/?frame=chitietsp&idCate=8&id=31
+Scan Time: 2025-11-14 20:07:26
+Vulnerabilities Found: 10
+
+----------------------------------------
+Vulnerability #1
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=%23+File%3A+payloads%2Fxss.txt&id=31
+Parameter: idCate
+Payload Used: # File: payloads/xss.txt
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #2
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E&id=31
+Parameter: idCate
+Payload Used: <script>alert('XSS')</script>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #3
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=%3Cimg+src%3Dx+onerror%3Dalert%28%27XSS-by-img-tag%27%29%3E&id=31
+Parameter: idCate
+Payload Used: <img src=x onerror=alert('XSS-by-img-tag')>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #4
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=%22%3E%3Cscript%3Ealert%28%27XSS-by-breaking-out%27%29%3C%2Fscript%3E&id=31
+Parameter: idCate
+Payload Used: "><script>alert('XSS-by-breaking-out')</script>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #5
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=%3Csvg+onload%3Dalert%28%27XSS-by-svg%27%29%3E&id=31
+Parameter: idCate
+Payload Used: <svg onload=alert('XSS-by-svg')>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #6
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=8&id=%23+File%3A+payloads%2Fxss.txt
+Parameter: id
+Payload Used: # File: payloads/xss.txt
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #7
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=8&id=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E
+Parameter: id
+Payload Used: <script>alert('XSS')</script>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #8
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=8&id=%3Cimg+src%3Dx+onerror%3Dalert%28%27XSS-by-img-tag%27%29%3E
+Parameter: id
+Payload Used: <img src=x onerror=alert('XSS-by-img-tag')>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #9
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=8&id=%22%3E%3Cscript%3Ealert%28%27XSS-by-breaking-out%27%29%3C%2Fscript%3E
+Parameter: id
+Payload Used: "><script>alert('XSS-by-breaking-out')</script>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+
+----------------------------------------
+Vulnerability #10
+----------------------------------------
+Type: Reflected XSS
+URL: http://localhost:8003/?frame=chitietsp&idCate=8&id=%3Csvg+onload%3Dalert%28%27XSS-by-svg%27%29%3E
+Parameter: id
+Payload Used: <svg onload=alert('XSS-by-svg')>
+Evidence: Payload was reflected in the page response.
+
+--- Mitigation ---
+- Implement context-aware output encoding for all user-supplied data.
+- Use a Content Security Policy (CSP) to restrict script sources.
+- Validate user input on the server side.
+

