@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><title>Full Vulnerability & Data Report</title><style>
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 30px; }
+    .container { max-width: 1200px; margin: auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    h1 { color: #1a73e8; text-align: center; border-bottom: 2px solid #e8eaed; padding-bottom: 20px; }
+    h2 { color: #d93025; border-left: 6px solid #d93025; padding-left: 15px; margin-top: 40px; }
+    h3 { color: #188038; background: #e6f4ea; padding: 12px; border-radius: 8px; margin-top: 30px; }
+    
+    /* Style cho bảng tổng quan */
+    .summary-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+    .summary-table th { background: #5f6368; color: white; }
+    .summary-table td, .summary-table th { border: 1px solid #dadce0; padding: 12px; text-align: left; }
+    .summary-table tr:nth-child(even) { background: #f8f9fa; }
+
+    /* Style cho bảng dữ liệu Records */
+    .data-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85em; display: block; overflow-x: auto; }
+    .data-table th { background: #1a73e8; color: white; white-space: nowrap; }
+    .data-table td, .data-table th { border: 1px solid #dadce0; padding: 10px; text-align: left; }
+    .data-table tr:hover { background: #f1f3f4; }
+    
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; background: #e8f0fe; color: #1967d2; }
+    </style></head><body>
+    <div class='container'>
+        <h1>Security Analysis & Data Exfiltration Report</h1>
+        <p><strong>Target Site:</strong> <code style='color:#d93025'>http://localhost/qlthoitrang/</code></p>
+        <p><strong>Generated on:</strong> 2025-12-17 12:58:15</p>
+    <h2>⚠️ Part 3: Vulnerabilities Detected</h2>
+        <div style='background:#fff; border:1px solid #dadce0; padding:15px; border-radius:8px; margin-bottom:15px;'>
+            <strong>#1 Stored/Reflected XSS (POST)</strong><br>
+            <small>URL: http://localhost/qlthoitrang/?frame=timkiem</small><br>
+            <small>Parameter: <code>timkiem</code></small>
+        </div>
+        
+        <div style='background:#fff; border:1px solid #dadce0; padding:15px; border-radius:8px; margin-bottom:15px;'>
+            <strong>#2 Time-Based SQLi (POST)</strong><br>
+            <small>URL: http://localhost/qlthoitrang/?frame=timkiem</small><br>
+            <small>Parameter: <code>timkiem</code></small>
+        </div>
+        </div><p style='text-align:center; color:#70757a; font-size:0.8em;'>End of Report</p></body></html>

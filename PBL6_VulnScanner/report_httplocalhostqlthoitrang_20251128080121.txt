@@ -1,0 +1,15 @@
+==================================================
+VULNERABILITY SCAN REPORT
+==================================================
+
+Target URL: http://localhost/qlthoitrang/
+Scan Time: 2025-11-28 08:01:21
+Vulnerabilities Found: 2
+
+----------------------------------------
+Vulnerability #1
+----------------------------------------
+Type: Stored/Reflected XSS (POST)
+URL: http://localhost/qlthoitrang/?frame=timkiem
+Parameter: timkiem
+Payload Used: <script>alert('XSS')</script>

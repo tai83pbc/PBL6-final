@@ -3,6 +3,7 @@ import time
 from urllib.parse import urlparse, urljoin, parse_qs, urlencode
 from bs4 import BeautifulSoup
 from PyQt5.QtCore import QObject, pyqtSignal
+import html
 
 # Để sử dụng Selenium, bạn cần: pip install selenium
 # Và tải về WebDriver tương ứng với trình duyệt của bạn (ví dụ: chromedriver)
@@ -107,24 +108,29 @@ class ScannerWorker(QObject):
     def _scan_get_url(self, url):
         parsed_url = urlparse(url)
         original_params = parse_qs(parsed_url.query)
-        if not original_params:
-                return  # Bỏ qua nếu không có tham số
+        if not original_params: return
 
         for param_name in original_params.keys():
-                original_value = original_params[param_name][0]
+            original_value = original_params[param_name][0]
 
-                # === 1. GIỮ NGUYÊN PHẦN TEST XSS (KHÔNG ĐỘNG VÀO) ===
-                for payload in self.xss_payloads:
-                        test_params = original_params.copy()
-                        test_params[param_name] = [payload]
-                        test_url = parsed_url._replace(query=urlencode(test_params, doseq=True)).geturl()
-                        try:
-                                res = self.session.get(test_url, timeout=5, verify=False)
-                                if payload in res.text:
-                                        self._add_vulnerability("Reflected XSS", test_url, param_name, payload)
-                                        break  # Tìm thấy XSS → dừng payload XSS
-                        except requests.RequestException:
-                                pass
+            # === ENHANCED XSS SCANNING ===
+            for payload in self.xss_payloads:
+                test_params = original_params.copy()
+                test_params[param_name] = [payload]
+                test_url = parsed_url._replace(query=urlencode(test_params, doseq=True)).geturl()
+                try:
+                    res = self.session.get(test_url, timeout=5, verify=False)
+                    if payload in res.text:
+                        # Context Analysis
+                        context = "HTML Body"
+                        if f'<script>{payload}' in res.text or f'"{payload}"' in res.text:
+                            context = "Inside Script/Attribute"
+                        
+                        evidence = f"Payload reflected in: {context}"
+                        self._add_vulnerability("Reflected XSS", test_url, param_name, payload, evidence=evidence)
+                        break 
+                except requests.RequestException:
+                    pass
 
                 # === 2. THÊM PHẦN TEST SQLi MẠNH HƠN (SAU XSS) ===
                 self.log_updated.emit(f"[TEST] Scanning SQLi on parameter: {param_name} = {original_value}")
@@ -195,17 +201,17 @@ class ScannerWorker(QObject):
                             self._add_vulnerability("Time-Based SQLi (POST)", target_url, input_to_test['name'], payload, method="POST", data=original_data)
                             return
 
-    def _add_vulnerability(self, vuln_type, url, parameter, payload, method="GET", data=None):
+    def _add_vulnerability(self, vuln_type, url, parameter, payload, method="GET", data=None, evidence=""):
         vulnerability = {
             "type": vuln_type, "url": url, "parameter": parameter, "payload": payload,
-            "method": method, "data": data,
+            "method": method, "data": data, "evidence": evidence
         }
         # Kiểm tra để tránh thêm trùng lặp
         for existing_vuln in self.vulnerabilities_found:
             if all(existing_vuln.get(k) == v for k, v in vulnerability.items() if k != 'payload'):
                 return # Lỗi tương tự đã tồn tại
         self.vulnerabilities_found.append(vulnerability)
-        self.log_updated.emit(f"[VULN] Found {vuln_type} at {url.split('?')[0]} on parameter '{parameter}'")
+        self.log_updated.emit(f"[VULN] Found {vuln_type} at {url}")
 
     def _crawl_with_selenium(self, url):
         """

