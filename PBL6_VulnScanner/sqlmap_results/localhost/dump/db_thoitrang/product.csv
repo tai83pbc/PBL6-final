@@ -1,0 +1,31 @@
+idProduct,idCategory,day,image,price,quantity,product_name,description
+3,1,20/10/2019,somi(1).jpg,499.000 VND,10,Áo sơ mi,"Dáng thông thường(regular)\r\nCó mũ, tay dài"
+4,1,28/10/2019,somi(2).jpg,599.000 VND,5,Áo sơ mi,"Dáng thông thường(regular)\r\nCó mũ, tay dài"
+5,1,20/10/2019,somi(3).jpg,300.000 VND,14,Áo sơ mi nam dài tay kẻ caro,"Áo sơ mi Cotton USA kẻ caro.\r\nPhom dáng regular, cổ đức, tay dài, có cúc cài trang trí ở lá cổ.\r\nPhù hợp mặc quanh năm. Mặc thoải mái, dễ chịu có thể kết hợp với quần jeans, khaki."
+6,1,20/10/2019,somi(4).jpg,599.000 VND,5,Áo sơ mi nam,"Áo sơ mi bamboo pha kẻ caro.\r\nPhom regular, cổ đức, tay dài.\r\nĐơn giản, lịch sự rất phù hợp mặc nơi công sở. Có thể kết hợp với quần âu, quần khaki, giày tây."
+7,1,20/10/2019,somi(5).jpg,300.000 VND,12,Áo sơ mi nam,"Áo sơ mi denim cotton họa tiết kẻ sọc.\r\nPhom regular, cổ đức, tay dài.\r\nCó túi ngực, cài cúc phía trước.\r\nThích hợp mặc quanh năm. Kiểu dáng đơn giản, lịch sự phù hợp nhiều hoàn cảnh.\r\nCó thể phối với nhiều dáng quần: quần jeans, khak, giày lười, giày tây"
+8,1,20/10/2019,somi(6).jpg,599.000 VND,20,Áo sơ mi nam,"Áo sơ mi cotton kẻ caro.\r\nPhom regular, cổ đức, tay dài.\r\nDòng hàng cơ bản bắt buộc có trong mùa."
+9,1,20/10/2019,somi(7).jpg,200.000 VND,12,Áo sơ mi nam,Áo sơ mi nam
+10,1,20/10/2019,somi(8).jpg,215.000 VND,17,Áo sơ mi nam ngắn tay,"Áo sơ mi nam ngắn tay in họa tiết nằm trong bộ sưu tập JOURNEY TO THE EAST\r\nChất liệu linen đặc biệt mềm mại, thoáng mát\r\nVới đặc tính sợi vải không xô dạt, không phai màu nên càng sử dụng lâu, linen càng mềm mại và êm ái hơn\r\n"
+11,2,20/10/2019,aokhoac(1).jpg,400.000 VND,10,Áo khoác,Áo khoác nam đen
+12,2,20/10/2019,aokhoac(2).jpg,300.000 VND,5,Áo khoác nam,Áo khoác nam
+13,2,20/10/2019,aokhoac(3).jpg,500.000 VND,9,Áo khoác nam,"Dáng thông thường (Regular)\r\nCHẤT LIỆU\r\n100%cotton\r\nGiặt máy ở chế độ nhẹ nhàng, nhiệt độ thông thường\r\nSử dụng hóa chất tẩy không có chất Clo\r\nSấy khô ở nhiệt độ thấp 110°, là ở nhiệt độ trung bình 150°\r\nGiặt với sản phẩm cùng màu\r\nNên phơi vắt ngang"
+14,2,20/10/2019,aokhoac(4).jpg,400.000 VND,17,Áo khoác nam,"Dáng thông thường (Regular)\r\nCHẤT LIỆU\r\n80% Cotton, 13% Polyester 2% Spandex 5% Latex\r\nGiặt máy ở chế độ nhẹ, nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy có chứa Clo\r\nPhơi trong bóng mát\r\nKhông được sấy, không được là\r\nKhông được giặt khô\r\nGiặt với sản phẩm cùng màu"
+15,2,20/10/2019,aokhoac(5).jpg,500.000 VND,13,Áo khoác nam,"Dáng thông thường (regular)\r\nSản phẩm có tính năng chống thấm nước\r\nCHẤT LIỆU\r\n100% polyester\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu"
+16,3,20/10/2019,aolen(1).jpg,400.000 VND,12,ÁO GHILE LEN LÔNG CỪU NAM,"Dáng thường (regular)\r\nCHẤT LIỆU\r\n100% Wool\r\nGiặt tay ở nhiệt độ thường, không sử dụng chất tẩy\r\nGiặt mặt trái sản phẩm, phơi phẳng trong bóng mát\r\nKhông được sấy, là nhiệt độ 110 độ C\r\nGiặt với sản phẩm cùng màu"
+17,3,20/10/2019,aolen(2).jpg,599.000 VND,12,ÁO LEN NAM MỎNG CỔ TRÒN DÀI TAY,"Áo len nam trơn màu\r\nThiết kế cổ tròn, tay và gấu bo gọn gàng\r\nChất liệu mềm mại, ấm áp, không gây tích điện\r\nCHẤT LIỆU\r\n100% Cotton\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu"
+18,3,20/10/2019,aolen(3).jpg,600.000 VND,9,Áo len nam dài tay cổ tròn,"Áo len nam dệt quả trám\r\nThiết kế cổ tròn, tay và gấu bo gọn gàng\r\nChất liệu mềm mại, ấm áp, không gây tích điện\r\nThông tin người mẫu: 1m82 & 72kg – Size quần 31, size áo: M\r\nCHẤT LIỆU\r\n100% Acrylic\r\nĐể sản phẩm nơi khô ráo\r\nTránh tiếp xúc trực tiếp với ánh nắng mặt trời và nhiệt độ cao\r\nTránh để bề mặt sản phẩm tiếp xúc với các vật sắc nhọn"
+19,3,20/10/2019,somi(4).jpg,450.000 VND,5,Áo len nam dài tay cổ tròn,Áo sơ mi dày cổ tròn dài tay
+20,4,20/10/2019,aochuidau(1).jpg,125.000 VND,12,Áo chui dầu dài tay," Áo chui đầu tay dài, cổ tròn"
+21,4,20/10/2019,aochuidau(2).jpg,449.000 VND,12,ÁO HOODIES NAM,"Áo hoodies nam dáng regular\r\nCó mũ, tay dài, in hình trẻ trung\r\nChất liệu mềm mại, thấm hút mồ hôi,co giãn thoải mái\r\nCHẤT LIỆU\r\n64% Polyester 34%cotton 2% spandex\r\nGiặt máy nhẹ nhàng, ở nhiệt độ thường\r\nKhông sử dụng hóa chất tẩy\r\nSấy khô nhẹ nhàng, là ở nhiệt độ trung bình 150 độ C\r\nGiặt với sản phẩm cùng màu"
+22,4,20/10/2019,aochuidau(3).jpg,399.000 VND,9,Áo nỉ chui đầu nam in hình,Áo nỉ
+23,6,20/10/2019,aophong(1).jpg,120.000 VND,7,Áo phông dài tay,"Áo thun nam dáng regular, cổ tròn, tay dài, in hình trước ngực\r\nChất liệu mềm mại, co giãn, thấm hút mồ hôi tốt, ít co ngót, bền bỉ theo năm tháng\r\nVải có nguồn gốc là Cotton US, được kiểm soát bởi hiệp hội bông US uy tín, đặc biệt khả năng truy xuất nguồn gốc đáng tin cậy nhất trong các loại bông"
+24,6,20/10/2019,aophong(2).jpg,150.000 VND,5,Áo phông nam tay dài in hình mickey,"Áo thun nam nằm trong bộ sưu tập Disney-Mickey\r\nDáng áo regular, cổ tròn, tay dài, in hình Mickey\r\nChất liệu Cotton US mềm mại, co giãn, thấm hút mồ hôi tốt\r\nChất liệu ít co ngót, bền bỉ theo năm tháng\r\nVải có nguồn gốc là Cotton US, được kiểm soát bởi hiệp hội bông US uy tín, đặc biệt khả năng truy xuất nguồn gốc đáng tin cậy nhất trong các loại bông"
+25,6,20/10/2019,aophong(3).jpg,200.000 VND,7,Áo phông ngắn tay, Áo phông ngắn tay
+26,7,20/10/2019,quanjean(1).jpg,500.000 VND,10,Quần jean,"Quần jeans Cotton USA.\r\nForm Regular, cạp thường, 5 túi .\r\nCái khoá trước, khuy kim loại.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len"
+27,7,20/10/2019,quanjean(2).jpg,600.000 VND,8,Quần jean nam,"Quần jeans cotton co giãn.\r\nPhom slim, cạp thường, 5 túi.\r\nCái khoá trước, khuy kim loại.\r\nHiệu ứng chà bạc.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len"
+28,7,20/10/2019,quanjean(3).jpg,760.000 VND,12,Quần jean nam,"Quần jeans cotton có co giãn.\r\nForm slim, cạp thường, 5 túi.\r\nCái khoá trước, khuy kim loại.\r\nPhù hợp mặc quanh năm, có thể kết hợp với áo sơ mi, polo, T-shirt, áo len"
+29,8,20/10/2019,quanvai(1).jpg,300.000 VND,7,Quần vải nam,Dáng jogger
+30,8,20/10/2019,quanvai(2).jpg,190.000 VND,10,Quần vải nam,Quần vải nam
+31,8,20/10/2019,quanvai(3).jpg,200.000 VND,8,Quần vải nam,Quần vải nam
+

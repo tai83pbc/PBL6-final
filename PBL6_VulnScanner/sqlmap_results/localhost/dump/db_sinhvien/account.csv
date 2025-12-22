@@ -1,0 +1,17 @@
+cusid,email,power,address,fullname,password,username,phonenumber
+1,nch@yahoo.com,admin,65-Nguyen Qui Duc,Nguyen Cong Hoang,admin,Admin,0905002124
+3,linh@yahoo.com,user,108 Ho Xuan Huong,Nguyen Ngoc Linh,123,linhlogin,0906123321
+6,songa@yahoo.com,user,Quang Binh,Ha Duy Son,123456,sonlogin,0901002003
+7,123@123,user,65nqd,nchoang,123456,hlogion,012345
+8,tien@Yahoo.com,user,CDCN,Nguyen Cong Tien,123456,tienlogin,0123123321
+9,hoang@yahoo.com,user,65 NQD,Nguyen Hoang,123456,hoang123login,0905939390
+10,123@yahoo,user,123,NK,123456,kienlogin,123123123
+11,212@ayhoo,user,?a,sda,123,dung,122121
+12,nttking,user,nttking,nttking,nttking,nttking,313
+13,test,user,test,",test,test,test
+25,test,user,test,test,test,",test
+26,test,user,test,test,test,1,test
+27,test,user,test,test,test,"""><img src=x onerror=aler",test
+39,<blank>,user,<blank>,<blank>,<blank>,<blank>,<blank>
+101,test,user,test,test,test, AND (SELECT 5 FROM PG_SL,test
+
